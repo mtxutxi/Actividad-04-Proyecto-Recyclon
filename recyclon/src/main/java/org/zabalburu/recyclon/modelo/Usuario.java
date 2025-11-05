@@ -14,10 +14,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Entity //Marcar como entidad JPA -> Aplicar Serializable
-@Table(name = "cliente") //Nombre de la tabla en la BBDD
+@Table(name = "usuario") //Nombre de la tabla en la BBDD
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Cliente implements Serializable {
+public class Usuario implements Serializable {
 	
 	/**
 	 * 
@@ -28,10 +28,10 @@ public class Cliente implements Serializable {
 	@Id //Para marcar "id_cliente" como PrimaryKey
 	@GeneratedValue(strategy = GenerationType.IDENTITY) //Para indicar que el id lo genera la BBDD
 	@Column(
-			name = "id_cliente" //Nombre de la columna en la BBDD
+			name = "id_usuario" //Nombre de la columna en la BBDD
 	)
 	@EqualsAndHashCode.Include
-	private Integer idCliente;
+	private Integer idUsuario;
 	
 	@Column(
 			columnDefinition = "varchar(100)" //Para asignar limite de 100 caracteres
@@ -40,11 +40,16 @@ public class Cliente implements Serializable {
 	
 	private String apellidos;
 	
-	@OneToMany(mappedBy = "cliente") //Relacion 1 a N, mappedBy -> apuntamos a la relacion de Pedido
+	@Column(
+		name = "is_admin"
+	)
+	private Boolean isAdmin;
+	
+	@OneToMany(mappedBy = "usuario") //Relacion 1 a N, mappedBy -> apuntamos a la relacion de Pedido
 	private List<Pedido> pedidos;
 
 	@Override
 	public String toString() {
-		return "Cliente [idCliente=" + idCliente + ", nombre=" + nombre + ", apellidos=" + apellidos + "]";
+		return "Usuario [idUsuario=" + idUsuario + ", nombre=" + nombre + ", apellidos=" + apellidos + "]";
 	}
 }
