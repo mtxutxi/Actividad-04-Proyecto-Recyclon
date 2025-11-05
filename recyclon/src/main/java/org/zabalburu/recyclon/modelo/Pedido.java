@@ -35,13 +35,13 @@ public class Pedido implements Serializable {
 	)
 	@EqualsAndHashCode.Include
 	private Integer idPedido;
-	
+
 	private Date fecha;
 	
 	@ManyToOne //N a 1
-	@JoinColumn(name = "id_cliente") //Apuntamos al id de Cliente (ForeignKey)
-	private Cliente cliente;
-	
+	@JoinColumn(name = "id_usuario") //Apuntamos al id de Cliente (ForeignKey)
+	private Usuario usuario;
+	 
 	@OneToMany(mappedBy = "pedido") //Relacion 1 a N, mappedBy -> apuntamos a la relacion de LineaPedido
 	private List<LineaPedido> lineasPedido;
 }
