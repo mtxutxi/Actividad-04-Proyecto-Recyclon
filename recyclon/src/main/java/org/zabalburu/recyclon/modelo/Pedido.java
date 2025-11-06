@@ -38,6 +38,8 @@ public class Pedido implements Serializable {
 
 	private Date fecha;
 	
+	private String estado;
+	
 	@ManyToOne //N a 1
 	@JoinColumn(name = "id_usuario") //Apuntamos al id de Cliente (ForeignKey)
 	private Usuario usuario;
