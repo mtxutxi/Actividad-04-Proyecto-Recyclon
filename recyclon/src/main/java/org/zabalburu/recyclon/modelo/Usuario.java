@@ -1,6 +1,7 @@
 package org.zabalburu.recyclon.modelo;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -39,6 +40,18 @@ public class Usuario implements Serializable {
 	private String nombre;
 	
 	private String apellidos;
+	
+	private Integer telefono;
+	
+	private Date fechaNacimiento;
+	
+	private String documentoIdentidad;
+	
+	private String email;
+	
+	private String direccionEnvio;
+	
+	private String direccionFacturacion;
 	
 	@Column(
 		name = "is_admin"
