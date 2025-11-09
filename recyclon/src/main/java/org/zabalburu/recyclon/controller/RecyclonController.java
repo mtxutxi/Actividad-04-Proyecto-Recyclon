@@ -16,13 +16,13 @@ import java.io.IOException;
 		initParams = { 
 				@WebInitParam(name = "acion", value = "")
 		})
-public class ControladorRecyclon extends HttpServlet {
+public class RecyclonController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ControladorRecyclon() {
+    public RecyclonController() {
         super();
         // TODO Auto-generated constructor stub
     }
