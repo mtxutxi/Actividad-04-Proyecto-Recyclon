@@ -1,4 +1,4 @@
-package org.zabalburu.recyclon.Beans;
+package org.zabalburu.recyclon.beans;
 
 public class MensajeBean {
 
