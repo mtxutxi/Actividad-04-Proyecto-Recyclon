@@ -2,11 +2,11 @@ package org.zabalburu.recyclon.service;
 
 import java.util.List;
 
-import org.zabalburu.recyclon.dao.CategoriaDAO;
-import org.zabalburu.recyclon.dao.LineaPedidoDAO;
-import org.zabalburu.recyclon.dao.PedidoDAO;
-import org.zabalburu.recyclon.dao.ProductoDAO;
-import org.zabalburu.recyclon.dao.UsuarioDAO;
+import org.zabalburu.recyclon.dao.categoria.CategoriaDAO;
+import org.zabalburu.recyclon.dao.lineapedido.LineaPedidoDAO;
+import org.zabalburu.recyclon.dao.pedido.PedidoDAO;
+import org.zabalburu.recyclon.dao.producto.ProductoDAO;
+import org.zabalburu.recyclon.dao.usuario.UsuarioDAO;
 import org.zabalburu.recyclon.modelo.Categoria;
 import org.zabalburu.recyclon.modelo.LineaPedido;
 import org.zabalburu.recyclon.modelo.Pedido;
@@ -94,12 +94,16 @@ public class GestionService {
 		return productoDAO.getProducto(id);
 	}
 	
-	public List<Categoria> getProductosPorCategoria() {
+	public List<Producto> getProductosPorCategoria() {
 		return productoDAO.getProductosPorCategoria();
 	}
 	
-	public List<Categoria> getCategoriaProducto(String categoria) {
-		return productoDAO.getCategoriaProducto(categoria);
+	public List<Producto> getCategoriaProducto(Integer idCategoria) {
+		return productoDAO.getCategoriaProducto(idCategoria);
+	}
+	
+	public List<Producto> buscarProducto(String busqueda) {
+		return productoDAO.buscarProducto(busqueda);
 	}
 	
 	//USUARIO//
