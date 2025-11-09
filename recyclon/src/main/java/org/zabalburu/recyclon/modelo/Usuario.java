@@ -43,14 +43,26 @@ public class Usuario implements Serializable {
 	
 	private Integer telefono;
 	
+	@Column(
+			name = "f_nacimiento" //Nombre de la columna en la BBDD
+	)
 	private Date fechaNacimiento;
 	
+	@Column(
+			name = "dni" //Nombre de la columna en la BBDD
+	)
 	private String documentoIdentidad;
 	
 	private String email;
 	
+	@Column(
+			name = "dir_envio" //Nombre de la columna en la BBDD
+	)
 	private String direccionEnvio;
 	
+	@Column(
+			name = "dir_facturacion" //Nombre de la columna en la BBDD
+	)
 	private String direccionFacturacion;
 	
 	@Column(
@@ -60,9 +72,12 @@ public class Usuario implements Serializable {
 	
 	@OneToMany(mappedBy = "usuario") //Relacion 1 a N, mappedBy -> apuntamos a la relacion de Pedido
 	private List<Pedido> pedidos;
-
+	
 	@Override
 	public String toString() {
-		return "Usuario [idUsuario=" + idUsuario + ", nombre=" + nombre + ", apellidos=" + apellidos + "]";
+		return "Usuario [idUsuario=" + idUsuario + ", nombre=" + nombre + ", apellidos=" + apellidos + ", telefono="
+				+ telefono + ", fechaNacimiento=" + fechaNacimiento + ", documentoIdentidad=" + documentoIdentidad
+				+ ", email=" + email + ", direccionEnvio=" + direccionEnvio + ", direccionFacturacion="
+				+ direccionFacturacion + ", isAdmin=" + isAdmin + "]";
 	}
 }
