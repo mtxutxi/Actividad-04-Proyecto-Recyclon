@@ -1,4 +1,4 @@
-package org.zabalburu.recyclon.dao;
+package org.zabalburu.recyclon.dao.usuario;
 
 import org.zabalburu.recyclon.modelo.Usuario;
 
