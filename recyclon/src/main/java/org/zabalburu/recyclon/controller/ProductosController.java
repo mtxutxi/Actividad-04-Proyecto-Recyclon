@@ -3,6 +3,7 @@ package org.zabalburu.recyclon.controller;
 import java.io.IOException;
 
 import org.zabalburu.recyclon.cdi.MensajeCDI;
+import org.zabalburu.recyclon.modelo.Producto;
 import org.zabalburu.recyclon.service.GestionService;
 
 import jakarta.inject.Inject;
@@ -96,8 +97,54 @@ public class ProductosController extends HttpServlet {
 	}
 
 	private String nuevoProducto(HttpServletRequest request, HttpServletResponse response) {
-		// TODO Auto-generated method stub
-		return null;
+		//Obtiene el parametro del formulario y lo guarda en una variable para manejar esos datos
+		String nombre = request.getParameter("nombre");
+		String descripcion = request.getParameter("descripcion");
+		String categoria = request.getParameter("categoria");
+		String strPrecio = request.getParameter("precio");
+		String strStock = request.getParameter("stock");
+		
+		//Ahora vamos a parsear los datos que hemos recibido de string a double e integer
+		Double precio = 0.0;
+		Integer stock = 0;
+		try {
+			precio = Double.parseDouble(strPrecio); //pasamos el string a double y lo guardamos en la variable prescio
+			stock = Integer.parseInt(strStock);
+		}catch(NumberFormatException e) {
+			//Si meten mal el dato por que la gente es así.. les damos un mensajito simpatico
+			mensajeCDI.setRole("alert alert-danger");
+			mensajeCDI.setMessage("Introduzca un valor valido");
+			return "producto.jsp"; //volvemos a la pagina para qu elo intetne de nuevo
+		}
+		//Comprobamos que el precio sea mayor que cero,si no, mandamos mensaje
+		if(precio <= 0) {
+			mensajeCDI.setRole("alert alert-danger");
+			mensajeCDI.setMessage("Introduzca un importe mayor que cero");
+			return "producto.jsp";
+		}
+		
+		//HAcemos lo mismo con stock
+		if(stock <= 0) {
+			mensajeCDI.setRole("alert alert-danger");
+			mensajeCDI.setMessage("Introduzca un numero superior a cero");
+			return "producto.jsp";
+		}
+		//CREAMOS EL NUEVO PRODUCTO y le asignamos sus atributos conseguidos con el formulario
+		Producto producto = new Producto();
+		producto.setNombre(nombre);
+		producto.setDescripcion(descripcion);
+		producto.setCategoria(null);
+		producto.setPrecio(precio); //Aqui ya estan bien parseados
+		producto.setStock(stock);
+		
+		//LLAMAMOS AL SERVICE y le pasamos el nuevo producto para que lo inserte en la BBDD
+		service.nuevoProducto(producto);
+		
+		//mostramos mensaje de exito
+		mensajeCDI.setRole("alert alert-success");
+		mensajeCDI.setMessage("¡Producto creado con exito!");
+		//volvemos a la pagina de inicio que nos mostrara la pagina con la lista actualizada
+		return "productos.jsp";
 	}
 
 	/**
