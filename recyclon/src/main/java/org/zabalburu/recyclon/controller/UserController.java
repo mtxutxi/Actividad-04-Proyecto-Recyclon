@@ -57,10 +57,6 @@ public class UserController extends HttpServlet {
 	}
 
 	private String saveUser(HttpServletRequest request, HttpServletResponse response) {
-		String uploadPath = getServletContext().getRealPath("") + File.separator + "fotos";
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists())
-            uploadDir.mkdir();
 		
 		String nombre = request.getParameter("nombre");
 		String apellidos = request.getParameter("apellidos");
@@ -79,21 +75,7 @@ public class UserController extends HttpServlet {
 			mensajeBean.setCssClass("alert-danger");
 			return "register.jsp";
 		}
-		String fileName = "";
-		Part part;
-		try {
-			part = request.getPart("foto");
-			fileName = part.getSubmittedFileName();
-			if (fileName != null) {
-		    	part.write(uploadPath + File.separator + fileName);
-		    }
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ServletException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 		Usuario u = new Usuario();
 		u.setNombre(nombre);
 		u.setApellidos(apellidos);
