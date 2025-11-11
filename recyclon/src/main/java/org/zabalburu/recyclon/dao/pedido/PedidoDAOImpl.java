@@ -42,6 +42,11 @@ public class PedidoDAOImpl implements PedidoDAO {
 			em.remove(eliminar); //EntityManager elimina ese registro
 		}
 	}
+	
+	@Override
+	public Pedido getPedido(Integer id) {
+		return em.find(Pedido.class, id);
+	}
 
 	@Override
 	public List<Pedido> getPedidos() {
@@ -52,7 +57,7 @@ public class PedidoDAOImpl implements PedidoDAO {
 		"""
 		SELECT p
 			FROM Pedido p
-			ORDER BY p.estado
+			ORDER BY p.usuario, p.estado
 		""", Pedido.class);
 		return q.getResultList();
 	}
