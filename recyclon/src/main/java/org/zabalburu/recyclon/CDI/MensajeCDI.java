@@ -14,6 +14,8 @@ public class MensajeCDI {
 	
 	private String role="ALERT_INFO";
 	private String message="";
+	private String texto;
+	private String cssClass; // clase de boostrap: INFO, ALERT, WARNING, ERROR
 	public MensajeCDI() {
 		// TODO Auto-generated constructor stub
 	}
