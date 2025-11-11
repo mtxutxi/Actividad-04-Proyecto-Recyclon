@@ -13,8 +13,8 @@ public class PasswordUtil {
         return result.verified;
     }
 
-    public static void main(String[] args) {
-        System.out.println(PasswordUtil.hashPassword("passw0rd"));
+    public static void main(String[] args) { // prueba
+        System.out.println(PasswordUtil.hashPassword("passw0rd")); // printea el hash de esta contraseña y se pega debajo (prueba)
         System.out.println(PasswordUtil.verifyPassword("passw0rd", "$2a$12$x7Ea5/2qRDvRy3Q9e.Oj2OmcXUFnK6BO8yQL3FEGcwu5Wbb5BcUMK"));
 
     }
