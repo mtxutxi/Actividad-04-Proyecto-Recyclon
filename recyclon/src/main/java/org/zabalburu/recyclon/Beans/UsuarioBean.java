@@ -4,8 +4,11 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.zabalburu.recyclon.dao.GestionDAO;
 import org.zabalburu.recyclon.modelo.Usuario;
+import org.zabalburu.recyclon.util.PasswordUtil;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Named;
 
@@ -13,7 +16,10 @@ import jakarta.inject.Named;
 @Named("usuario")
 public class UsuarioBean implements Serializable {
     private String nombreUsuario;
+    private Usuario usuarioActual;
     private boolean autenticado = false;
+    
+    private GestionDAO gestionDAO = new GestionDAOImpl();
 
     // Usuarios predefinidos
     private static final Map<String, String> usuarios = new HashMap<>();
@@ -23,17 +29,25 @@ public class UsuarioBean implements Serializable {
         usuarios.put("usuario2", "password2");
     }
 
-    public boolean login(String nombreUsuario, String password) {
-        if (usuarios.containsKey(nombreUsuario) && usuarios.get(nombreUsuario).equals(password)) {
-            this.nombreUsuario = nombreUsuario;
-            this.autenticado = true;
-            return true;
+    public Usuario login(String email, String password) {
+        Usuario u = gestionDAO.buscarUsuarioPorEmail(email);
+        
+        if (u != null && u.getPassword() != null) {
+            // Verificar contraseña usando tu PasswordUtil 👇
+            if (PasswordUtil.verifyPassword(password, u.getPassword())) {
+                this.nombreUsuario = u.getNombre();
+                this.usuarioActual = u;
+                this.autenticado = true;
+                return u;
+            }
         }
-        return false;
+        
+        return null;
     }
 
     public void logout() {
         this.nombreUsuario = null;
+        //this.usuarioActual = null;
         this.autenticado = false;
     }
 
@@ -45,8 +59,21 @@ public class UsuarioBean implements Serializable {
         return autenticado;
     }
 
-	public void nuevoUsuario(Usuario u, String password) {
-		// TODO Auto-generated method stub
-		
-	}
+    public void nuevoUsuario(Usuario u, String password) {
+        String passwordHash = PasswordUtil.hashPassword(password);
+        u.setPassword(passwordHash);
+        u.setIsAdmin(false);
+        
+        gestionDAO.nuevoUsuario(u);
+    }
+	
+    public Usuario getUsuarioActual() {
+        return usuarioActual;
+    }
+    
+    public boolean isAdmin() {
+        return autenticado && usuarioActual != null && 
+               usuarioActual.getIsAdmin() != null && 
+               usuarioActual.getIsAdmin();
+    }
 }

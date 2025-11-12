@@ -6,6 +6,7 @@ import org.zabalburu.recyclon.modelo.Categoria;
 import org.zabalburu.recyclon.modelo.LineaPedido;
 import org.zabalburu.recyclon.modelo.Pedido;
 import org.zabalburu.recyclon.modelo.Producto;
+import org.zabalburu.recyclon.modelo.Usuario;
 
 
 
@@ -29,4 +30,8 @@ public interface GestionDAO {
 	List<Producto> getProductosPedido(); //Listar los productos de cada 
 	LineaPedido getLineaPedido(Integer id); 
 	
+    //USUARIO añadidos metodos user para jugar login
+    Usuario getUsuario(Integer id);
+    Usuario buscarUsuarioPorEmail(String email);
+    Usuario nuevoUsuario(Usuario nuevo);
 } 

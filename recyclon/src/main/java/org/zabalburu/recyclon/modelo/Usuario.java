@@ -42,6 +42,8 @@ public class Usuario implements Serializable {
 	
 	private String email; //AÑADIDO MAIL
 	
+	private String password; //AÑADIDO PSWRD
+	
 	@Column(
 		name = "is_admin"
 	)

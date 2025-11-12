@@ -97,7 +97,7 @@ public class UserController extends HttpServlet {
 		if (usuario.isBlank() || password.isBlank()) {
 			error = "Debe especificar todos los campos";
 		} else {
-			Usuario u = usuario.login(usuario, password);
+			Usuario u = usuarioBean.login(usuario, password);
 			if (u == null){
 				error = "Usuario / password erróneos";
 			} else {
