@@ -1,10 +1,12 @@
 package org.zabalburu.recyclon.controller;
 
+import org.zabalburu.recyclon.Beans.UsuarioBean;
+import org.zabalburu.recyclon.CDI.MensajeCDI;
+import org.zabalburu.recyclon.modelo.Usuario;
+
 import java.io.File;
 import java.io.IOException;
 
-import org.zabalburu.recyclon.modelo.Usuario;
-import org.zabalburu.recyclon.CDI.MensajeCDI;
 
 import jakarta.inject.Inject;
 import jakarta.servlet.ServletException;
@@ -13,6 +15,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 
 /**
@@ -43,16 +46,17 @@ public class UserController extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
 		String pagina = "";
-		if (accion == null) {
-			pagina = "index.jsp";  // login
-		} else if (accion.toLowerCase().equals("login")){
-			pagina = login(request,response);
-		} else if (accion.toLowerCase().equals("register")) {
-			pagina = "register.jsp";
-		} else if (accion.toLowerCase().equals("saveuser")) {
-			
-			pagina = saveUser(request,response);
-		}
+        if (accion == null) {
+            pagina = "index.jsp";
+        } else if (accion.equalsIgnoreCase("login")) {
+            pagina = login(request, response);
+        } else if (accion.equalsIgnoreCase("register")) {
+            pagina = "register.jsp";
+        } else if (accion.equalsIgnoreCase("saveuser")) {
+            pagina = saveUser(request, response);
+        } else if (accion.equalsIgnoreCase("logout")) {
+            pagina = logout(request, response);
+        }
 		request.getRequestDispatcher(pagina).forward(request, response);
 	}
 
@@ -66,7 +70,7 @@ public class UserController extends HttpServlet {
 		
 		if (nombre.isBlank() || apellidos.isBlank() || email.isBlank() || password.isBlank()
 				|| password2.isBlank()) {
-			mensajeBean.setTexto("Todos los campos excepto la foto SON OBLIGATORIOS!");
+			mensajeBean.setTexto("Todos los campos SON OBLIGATORIOS!");
 			mensajeBean.setCssClass("alert-danger");
 			return "register.jsp";
 		}
@@ -80,28 +84,45 @@ public class UserController extends HttpServlet {
 		u.setNombre(nombre);
 		u.setApellidos(apellidos);
 		u.setEmail(email);
-		if (fileName != null) {
-			u.setFoto(fileName);
-		}
+		
+		
 		usuarioBean.nuevoUsuario(u, password);
-	    return "events";
-	}
+	    return "productos";
+		}
 
 	private String login(HttpServletRequest request, HttpServletResponse response) {
-		String email = request.getParameter("email");
+		String usuario = request.getParameter("usuario");
 		String password = request.getParameter("password");
-		if (email.isBlank() || password.isBlank()) {
-			mensajeBean.setTexto("Todos los campos sonb OBLIGATORIOS!");
-			mensajeBean.setCssClass("alert-danger");
+		String error = null;
+		if (usuario.isBlank() || password.isBlank()) {
+			error = "Debe especificar todos los campos";
+		} else {
+			Usuario u = usuario.login(usuario, password);
+			if (u == null){
+				error = "Usuario / password erróneos";
+			} else {
+				HttpSession sesion = request.getSession();
+				sesion.setAttribute("usuario", u);
+			}
+		}
+		if (error != null) {
+			request.setAttribute("error", error);
 			return "index.jsp";
-		} 
-		if (usuarioBean.login(email, password) == null) {
-			mensajeBean.setTexto("Usuario / Password ERRÓNEOS");
-			mensajeBean.setCssClass("alert-danger");
-			return "index.jsp";
-		} 
-		return "events";
+		} else {
+			return "usuario.jsp";
+		}
 	}
+
+	
+    private String logout(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        mensajeBean.setTexto("Sesion cerrada correctamente");
+        mensajeBean.setCssClass("alert-success");
+        return "index.jsp";
+    }
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
