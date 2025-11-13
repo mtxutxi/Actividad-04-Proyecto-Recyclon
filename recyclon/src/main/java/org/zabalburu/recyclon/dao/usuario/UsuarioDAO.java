@@ -3,7 +3,7 @@ package org.zabalburu.recyclon.dao.usuario;
 import org.zabalburu.recyclon.modelo.Usuario;
 
 public interface UsuarioDAO {
-	Usuario nuevoUsuario(Usuario nuevo); //Registro de usuario
+	Usuario nuevoUsuario(Usuario nuevo);
 	Usuario modificarUsuario(Usuario modificado);
-	Usuario login(String email, String contrasenaHash);
+	Usuario buscarUsuarioPorEmail(String email);
 }

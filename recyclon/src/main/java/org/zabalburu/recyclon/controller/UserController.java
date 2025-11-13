@@ -1,7 +1,7 @@
 package org.zabalburu.recyclon.controller;
 
 import org.zabalburu.recyclon.Beans.UsuarioBean;
-import org.zabalburu.recyclon.CDI.MensajeCDI;
+import org.zabalburu.recyclon.cdi.MensajeCDI;
 import org.zabalburu.recyclon.modelo.Usuario;
 
 import java.io.File;

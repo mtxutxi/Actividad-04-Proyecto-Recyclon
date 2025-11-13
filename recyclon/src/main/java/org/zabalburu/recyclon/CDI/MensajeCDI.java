@@ -1,4 +1,4 @@
-package org.zabalburu.recyclon.CDI;
+package org.zabalburu.recyclon.cdi;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Named;

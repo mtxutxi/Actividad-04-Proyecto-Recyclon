@@ -110,16 +110,16 @@ public class GestionService {
 		return productoDAO.buscarProducto(busqueda);
 	}
 	
-	//USUARIO//
+	//USUARIO
 	public Usuario nuevoUsuario(Usuario nuevo) {
 		return usuarioDAO.nuevoUsuario(nuevo);
 	}
-	
+
 	public Usuario modificarUsuario(Usuario modificado) {
 		return usuarioDAO.modificarUsuario(modificado);
 	}
-	
-	public Usuario login(String email, String contrasenaHash) {
-		return usuarioDAO.login(email, contrasenaHash);
+
+	public Usuario buscarUsuarioPorEmail(String email) {
+		return usuarioDAO.buscarUsuarioPorEmail(email);
 	}
 }

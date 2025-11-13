@@ -1,39 +1,36 @@
 package org.zabalburu.recyclon.Beans;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.zabalburu.recyclon.dao.GestionDAO;
 import org.zabalburu.recyclon.modelo.Usuario;
+import org.zabalburu.recyclon.service.GestionService;
 import org.zabalburu.recyclon.util.PasswordUtil;
 
-import at.favre.lib.crypto.bcrypt.BCrypt;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 @SessionScoped
-@Named("usuario")
+@Named("usuarioBean")
 public class UsuarioBean implements Serializable {
+    
+    private static final long serialVersionUID = 1L;
+    
     private String nombreUsuario;
     private Usuario usuarioActual;
     private boolean autenticado = false;
     
-    private GestionDAO gestionDAO = new GestionDAOImpl();
-
-    // Usuarios predefinidos
-    private static final Map<String, String> usuarios = new HashMap<>();
-
-    static {
-        usuarios.put("usuario1", "password1");
-        usuarios.put("usuario2", "password2");
-    }
-
+    // ⬇️ CAMBIO 1: Inyectar GestionService en lugar de crear un DAO
+    @Inject
+    private GestionService service;
+    
+    /**
+     * Login de usuario
+     */
     public Usuario login(String email, String password) {
-        Usuario u = gestionDAO.buscarUsuarioPorEmail(email);
+        Usuario u = service.buscarUsuarioPorEmail(email);
         
-        if (u != null && u.getPassword() != null) {
-            if (PasswordUtil.verifyPassword(password, u.getPassword())) {
+        if (u != null && u.getContrasenaHash() != null) {
+            if (PasswordUtil.verifyPassword(password, u.getContrasenaHash())){
                 this.nombreUsuario = u.getNombre();
                 this.usuarioActual = u;
                 this.autenticado = true;
@@ -43,29 +40,39 @@ public class UsuarioBean implements Serializable {
         
         return null;
     }
-
+    
+    /**
+     * Logout de usuario
+     */
     public void logout() {
         this.nombreUsuario = null;
-        //this.usuarioActual = null;
+        this.usuarioActual = null;
         this.autenticado = false;
     }
-
-    public String getNombreUsuario() {
-        return nombreUsuario;
-    }
-
-    public boolean isAutenticado() {
-        return autenticado;
-    }
-
+    
+    /**
+     * Registro de nuevo usuario
+     */
     public void nuevoUsuario(Usuario u, String password) {
         String passwordHash = PasswordUtil.hashPassword(password);
         u.setPassword(passwordHash);
         u.setIsAdmin(false);
         
-        gestionDAO.nuevoUsuario(u);
+        service.nuevoUsuario(u);
+        
+        this.nombreUsuario = u.getNombre();
+        this.usuarioActual = u;
+        this.autenticado = true;
     }
-	
+    
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
+    
+    public boolean isAutenticado() {
+        return autenticado;
+    }
+    
     public Usuario getUsuarioActual() {
         return usuarioActual;
     }
