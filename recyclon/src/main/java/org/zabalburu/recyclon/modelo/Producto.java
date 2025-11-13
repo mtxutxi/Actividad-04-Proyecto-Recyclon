@@ -44,6 +44,8 @@ public class Producto implements Serializable {
 	
 	private Integer stock;
 	
+	private String imagen;
+	
 	@ManyToOne //N a 1
 	@JoinColumn(name = "id_categoria") //Apuntamos al id de Categoria (ForeignKey)
 	private Categoria categoria;	

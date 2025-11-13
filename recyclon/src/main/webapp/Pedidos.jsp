@@ -54,6 +54,8 @@
                   </li>
               </ul>  
               
+              accion ver para admin y user. si se usa el id del admin le salen absolutamente todos los pedidos. si meten el id de el ususario X, le muestra solo los suyos
+              
           </div>
         </div>
     </nav>

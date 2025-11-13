@@ -140,52 +140,8 @@
             				</div>
                         </div>
                     </div>
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingTwo">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                Pedidos
-                            </button>
-                        </h2>
-                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
-                            data-bs-parent="#accordionUser">
-                            <div class="accordion-body">
-                                <c:if test="${empty usuario.pedidos}">
-                                    <div class="row">
-                                        <div class="col-3"></div>
-                                        <div class="col-6">
-                                            <div class="alert alert-info">No hay pedidos</div>
-                                        </div>
-                                    </div>
-                                </c:if>
-                                <c:if test="${!empty usuario.pedidos}">
-                                    <div class="row">
-                                        <div class="col-3"></div>
-                                        <div class="col-6">
-                                            <table class="table table-striped">
-                                                <thead>
-                                                    <tr>
-                                                        <th scope="col">#</th>
-                                                        <th scope="col">Id</th>
-                                                        <th scope="col">Fecha</th>
-                                                        <th scope="col"></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <c:forEach var="e" items="${ usuarioBean.pedidos }">
-                                                        <tr>
-                                                            <th scope="row">${e.id }</th>
-                                                            <td><fmt:formatDate value="${e.fecha }" /></td>
-                                                            <td><a href="pedidos?accion=verPedido&id=${e.id }">Ver</a></td>
-                                                        </tr>
-                                                    </c:forEach>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </c:if>
-                            </div>
-                        </div>
+                    <div class="container-fluid  justify-content-center align-items-center mt-5">
+                    	<button class="btn btn-outline-success rounded">Ver Pedidos</button>
                     </div>
                 </div>
             </div>
