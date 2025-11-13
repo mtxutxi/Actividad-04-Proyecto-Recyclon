@@ -70,6 +70,9 @@ public class Usuario implements Serializable {
 	)
 	private String direccionFacturacion;
 	
+	private String password; //AÑADIDO PSWRD
+
+	
 	@Column(
 		name = "is_admin"
 	)
