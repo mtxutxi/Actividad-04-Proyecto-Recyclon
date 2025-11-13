@@ -73,10 +73,6 @@ public class GestionService {
 		return modificarPedido(modificado);
 	}
 	
-	public Pedido getPedido(Integer id) {
-		return pedidoDAO.getPedido(id);
-	}
-	
 	public List<Pedido> getPedidos() {
 		return pedidoDAO.getPedidos();
 	}
