@@ -56,7 +56,7 @@ public class Usuario implements Serializable {
 	private String email;
 	
 	@Column(
-			name = "contraseña_hash"
+			name = "contrasena_hash"
 	)
 	private String contraseñaHash;
 	
