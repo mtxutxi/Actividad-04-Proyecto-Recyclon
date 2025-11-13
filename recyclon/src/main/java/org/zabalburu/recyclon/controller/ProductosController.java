@@ -114,7 +114,7 @@ public class ProductosController extends HttpServlet {
 		HttpSession sesion = request.getSession();
 	    Usuario usuario = (Usuario) sesion.getAttribute("usuario");
 	    //Si no hay sesion iniciada  o esta iniciada pero no es Admin, le llevamos a la pagina de registro
-	    if (usuario == null || !usuario.isAdmin()) {
+	    if (usuario == null || !usuario.getIsAdmin()) {
 	    	mensajeCDI.setMessage("La operación requiere permisos de administrador.");
 	    	mensajeCDI.setRole("alert-danger");
 	    	return "index.jsp"; //en el index esta el logueo
@@ -123,11 +123,11 @@ public class ProductosController extends HttpServlet {
 		service.eliminarProducto(id); //Eliminamos el producto
 		mensajeCDI.setMessage("Se ha eliminado el producto correctamente");
 		mensajeCDI.setRole("alert-success");
-		return "productos.jsp"; //retornamos a la pagina
+		return "producto.jsp"; //retornamos a la pagina
 	}
 
 	private String modificarProducto(HttpServletRequest request, HttpServletResponse response) {
-		//Verificamos sesion
+		//Verificamos la sesionsesion
 		HttpSession sesion = request.getSession();
 	    Usuario usuario = (Usuario) sesion.getAttribute("usuario");
 	    //Si no hay sesion iniciada  o esta iniciada pero no es Admin, le llevamos a la pagina de registro
@@ -137,15 +137,43 @@ public class ProductosController extends HttpServlet {
 	    	return "index.jsp"; //en el index esta el logueo
 	    }
 	    
+	    //Primero obtenemos los datos del formulario y validamos que exista el producto por su id
 	    String strIdProducto = request.getParameter("id");
 	    Integer idProducto = Integer.parseInt(strIdProducto);
 	    Producto producto = service.getProducto(idProducto);
-	    if(producto == null) {
+	    if(producto == null) { //Si es null
 	    	mensajeCDI.setMessage("Introduzca un id que exista");
 			mensajeCDI.setRole("alert-danger");
-			return "productos.jsp";
+			return "producto.jsp";
+	    }
+	    //Si existe, te da el producto y continuamos
+	    String nombre = request.getParameter("nombre");
+	    String descripcion = request.getParameter("descripcion");
+	    String strPrecio = request.getParameter("precio");
+	    String strStock = request.getParameter("stock");
+	    Double precio = Double.parseDouble(strPrecio);
+	    Integer stock = Integer.parseInt(strStock);
+	    
+	    //Ahora le pasamos los datos del formulario al producto
+	    producto.setNombre(nombre);
+	    producto.setDescripcion(descripcion);
+	    producto.setPrecio(precio);
+	    producto.setStock(stock);
+	    
+	    //Lo guardamos en la BBDD
+	    service.modificarProducto(producto);
+	    
+	    
+	    //Si tenemos exito
+	    if(producto != null) {
+	        mensajeCDI.setMessage("Producto modificado correctamente");
+	        mensajeCDI.setRole("alert-success");
+	    } else {
+	        mensajeCDI.setMessage("Error al modificar el producto");
+	        mensajeCDI.setRole("alert-danger");
 	    }
 	    
+	    return "productos.jsp";
 	}
 
 	private String nuevoProducto(HttpServletRequest request, HttpServletResponse response) {
