@@ -33,7 +33,6 @@ public class UsuarioBean implements Serializable {
         Usuario u = gestionDAO.buscarUsuarioPorEmail(email);
         
         if (u != null && u.getPassword() != null) {
-            // Verificar contraseña usando tu PasswordUtil 👇
             if (PasswordUtil.verifyPassword(password, u.getPassword())) {
                 this.nombreUsuario = u.getNombre();
                 this.usuarioActual = u;
