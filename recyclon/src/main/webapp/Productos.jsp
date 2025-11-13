@@ -57,6 +57,138 @@
           </div>
         </div>
     </nav>
-    --AQUI METER CONTENEDOR CON UN CARD POR CADA PRODUCTO(meter 8 productos). PoDEMOS CREAR UN FOREACH POR CADA CARD CON JS y en otro fichero tener los datos de los productos
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="container-fluid px-4">
+        
+        <!-- Mensajes -->
+        <c:if test="${not empty mensaje.message}">
+            <div class="alert ${mensaje.role} alert-dismissible fade show mt-3" role="alert">
+                <i class="bi bi-info-circle"></i> ${mensaje.message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        </c:if>
+
+        <!-- Título y Buscador -->
+        <div class="row mt-4 mb-4">
+            <div class="col-md-6">
+                <h1 class="text-recyclon">
+                    <i class="bi bi-shop"></i> Catálogo de Productos
+                </h1>
+            </div>
+            <div class="col-md-6">
+                <form action="productos" method="get" class="input-group">
+                    <input type="hidden" name="accion" value="buscarproducto">
+                    <input type="text" name="producto" class="form-control" 
+                           placeholder="Buscar productos...">
+                    <button type="submit" class="btn btn-recyclon">
+                        <i class="bi bi-search"></i> Buscar
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Productos por Categoría -->
+        <c:forEach var="entrada" items="${productosporcategoria}">
+            <div class="mb-5">
+                <!-- Cabecera de Categoría -->
+                <div class="categoria-header">
+                    <h3 class="mb-0">
+                        <i class="bi bi-tag-fill"></i> ${entrada.key.nombre}
+                    </h3>
+                </div>
+                
+                <!-- Grid de Productos -->
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                    <c:forEach var="producto" items="${entrada.value}">
+                        <div class="col">
+                            <div class="card shadow-sm position-relative">
+                                <!-- Badge de Stock -->
+                                <span class="badge badge-stock ${producto.stock > 0 ? 'bg-success' : 'bg-danger'}">
+                                    <c:choose>
+                                        <c:when test="${producto.stock > 0}">
+                                            Stock: ${producto.stock}
+                                        </c:when>
+                                        <c:otherwise>
+                                            Agotado
+                                        </c:otherwise>
+                                    </c:choose>
+                                </span>
+
+                                <!-- Imagen del Producto -->
+                                <c:choose>
+                                    <c:when test="${not empty producto.imagen}">
+                                        <img src="imagenes/${producto.imagen}" 
+                                             class="card-img-top" 
+                                             alt="${producto.nombre}">
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" 
+                                             style="height: 200px;">
+                                            <i class="bi bi-image text-white" style="font-size: 3rem;"></i>
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
+
+                                <!-- Cuerpo de la Tarjeta -->
+                                <div class="card-body">
+                                    <h5 class="card-title text-truncate" title="${producto.nombre}">
+                                        ${producto.nombre}
+                                    </h5>
+                                    <p class="card-text text-muted small" style="height: 60px; overflow: hidden;">
+                                        ${producto.descripcion}
+                                    </p>
+                                    
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="h4 mb-0 text-success fw-bold">
+                                            <fmt:formatNumber value="${producto.precio}" type="currency" currencySymbol="€"/>
+                                        </span>
+                                    </div>
+
+                                    <!-- Botones de Acción -->
+                                    <div class="d-grid gap-2">
+                                        <a href="productos?accion=getproducto&id=${producto.id}" 
+                                           class="btn btn-outline-success btn-sm">
+                                            <i class="bi bi-eye"></i> Ver Detalles
+                                        </a>
+                                        
+                                        <!-- Botones Admin -->
+                                        <c:if test="${sessionScope.usuario != null && sessionScope.usuario.isAdmin}">
+                                            <div class="btn-group" role="group">
+                                                <a href="productos?accion=modificarproducto&id=${producto.id}" 
+                                                   class="btn btn-warning btn-sm">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
+                                                <a href="productos?accion=eliminarproducto&id=${producto.id}" 
+                                                   class="btn btn-danger btn-sm"
+                                                   onclick="return confirm('¿Eliminar ${producto.nombre}?')">
+                                                    <i class="bi bi-trash"></i>
+                                                </a>
+                                            </div>
+                                        </c:if>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </c:forEach>
+                </div>
+            </div>
+        </c:forEach>
+
+        <!-- Si no hay productos -->
+        <c:if test="${empty productosporcategoria}">
+            <div class="alert alert-info text-center mt-5">
+                <i class="bi bi-info-circle" style="font-size: 3rem;"></i>
+                <h4 class="mt-3">No hay productos disponibles</h4>
+                <p>Vuelve más tarde o añade productos nuevos</p>
+                <c:if test="${sessionScope.usuario != null && sessionScope.usuario.isAdmin}">
+                    <a href="formularioProducto.jsp" class="btn btn-recyclon mt-2">
+                        <i class="bi bi-plus-circle"></i> Añadir Primer Producto
+                    </a>
+                </c:if>
+            </div>
+        </c:if>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
