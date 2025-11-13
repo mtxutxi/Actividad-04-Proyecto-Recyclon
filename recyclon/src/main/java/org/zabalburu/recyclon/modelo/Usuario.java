@@ -56,6 +56,11 @@ public class Usuario implements Serializable {
 	private String email;
 	
 	@Column(
+			name = "contraseña_hash"
+	)
+	private String contraseñaHash;
+	
+	@Column(
 			name = "dir_envio" //Nombre de la columna en la BBDD
 	)
 	private String direccionEnvio;
