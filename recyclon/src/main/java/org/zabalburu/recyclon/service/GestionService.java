@@ -118,4 +118,8 @@ public class GestionService {
 	public Usuario modificarUsuario(Usuario modificado) {
 		return usuarioDAO.modificarUsuario(modificado);
 	}
+	
+	public Usuario login(String email, String contrasenaHash) {
+		return usuarioDAO.login(email, contrasenaHash);
+	}
 }
