@@ -5,4 +5,5 @@ import org.zabalburu.recyclon.modelo.Usuario;
 public interface UsuarioDAO {
 	Usuario nuevoUsuario(Usuario nuevo); //Registro de usuario
 	Usuario modificarUsuario(Usuario modificado);
+	Usuario login(String email, String contrasenaHash);
 }
