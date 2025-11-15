@@ -107,7 +107,7 @@ public class ProductosController extends HttpServlet {
 		String strIdProducto = request.getParameter("id");
 		Integer idProducto = Integer.parseInt(strIdProducto);
 		Producto producto = service.getProducto(idProducto);
-		request.setAttribute("detalleproducto", producto);//Ojo! que sin esto el jsp no lo ve!!!!!
+		request.setAttribute("producto", producto);//Ojo! que sin esto el jsp no lo ve!!!!!
 		return "detalleproducto.jsp";
 	}
 
