@@ -119,6 +119,10 @@ public class GestionService {
 		return usuarioDAO.modificarUsuario(modificado);
 	}
 	
+	public Usuario getUsuario(Integer id) {
+		return usuarioDAO.getUsuario(id);
+	}
+	
 	public Usuario login(String email, String contrasenaHash) {
 		return usuarioDAO.login(email, contrasenaHash);
 	}

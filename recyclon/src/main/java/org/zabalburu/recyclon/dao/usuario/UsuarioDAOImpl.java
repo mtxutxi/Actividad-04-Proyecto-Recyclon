@@ -36,6 +36,11 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 	}
 	
 	@Override
+	public Usuario getUsuario(Integer id) {
+		return em.find(Usuario.class, id);
+	}
+	
+	@Override
 	public Usuario login(String email, String password) {
 		try {
 			TypedQuery<Usuario> q = em.createQuery( //Con typedQuery se le indica al compilador el tipo de lista que va a devolver (Usuario)
