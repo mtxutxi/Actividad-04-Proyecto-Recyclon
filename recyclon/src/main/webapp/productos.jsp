@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>    
 <!DOCTYPE html>
 <html>
 <head>
@@ -76,7 +78,7 @@
                 </h1>
             </div>
             <div class="col-md-6">
-                <form action="productos" method="get" class="input-group">
+                <form action="productos" method="get" class="input-group"><!-- Action manda los datos al servlet de productos. Con el get los parametros van en la URL -->
                     <input type="hidden" name="accion" value="buscarproducto">
                     <input type="text" name="producto" class="form-control" 
                            placeholder="Buscar productos...">
@@ -88,28 +90,28 @@
         </div>
 
         <!-- PRODUCTOS POR CATEGORIA -->
-		<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-    <c:forEach var="producto" items="${productosporcategoria}">
+		<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4"> <!-- Cuantas columnas por fila según el tamaño de la pantalla -->
+    	<c:forEach var="producto" items="${productosporcategoria}">
         <div class="col">
             <div class="card shadow-sm position-relative">
                 <!-- Badge de Stock -->
-                <span class="badge ${producto.stock > 0 ? 'bg-success' : 'bg-danger'}">
-                    <c:choose>
-                        <c:when test="${producto.stock > 0}">
-                            Stock: ${producto.stock}
+                <span class="badge ${producto.stock > 0 ? 'bg-success' : 'bg-danger'}"> <!-- Si hay stock(verde) si no(rojo) -->
+                    <c:choose> <!-- if-else -->
+                        <c:when test="${producto.stock > 0}"> <!-- Si hay mas de 0 preoductos -->
+                            Stock: ${producto.stock} <!-- mostramos el numero de productos que hay -->
                         </c:when>
-                        <c:otherwise>
+                        <c:otherwise> <!-- Si no, mostramos agotado -->
                             Agotado
                         </c:otherwise>
                     </c:choose>
                 </span>
 
-                <!-- Imagen -->
+                <!-- Imagen usamos choose que equivale al if-else. Lo vamos a usar para que en caso de no haber imagen, muestre el tipico recuadro gris -->
                 <c:choose>
-                    <c:when test="${not empty producto.imagen}">
+                    <c:when test="${not empty producto.imagen}"> <!-- Esto es el if -->
                         <img src="imagenes/${producto.imagen}" class="card-img-top" alt="${producto.nombre}">
                     </c:when>
-                    <c:otherwise>
+                    <c:otherwise><!-- Esto es el else -->
                         <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
                             <i class="bi bi-image text-white" style="font-size: 3rem;"></i>
                         </div>
@@ -124,7 +126,7 @@
                     </span>
 
                     <div class="d-grid gap-2 mt-2">
-                        <a href="productos?accion=getproducto&id=${producto.id}" class="btn btn-outline-success btn-sm">
+                        <a href="productos?accion=getproducto&id=${producto.id}" class="btn btn-outline-success btn-sm"> <!-- Aqui va al producto del id -->
                             <i class="bi bi-eye"></i> Ver Detalles
                         </a>
                     </div>
@@ -134,11 +136,12 @@
     </c:forEach>
 </div>
         <!-- Si no hay productos -->
+        
         <c:if test="${empty productosporcategoria}">
             <div class="alert alert-info text-center mt-5">
                 <i class="bi bi-info-circle" style="font-size: 3rem;"></i>
                 <h4 class="mt-3">No hay productos disponibles</h4>
-                <p>Vuelve más tarde o añade productos nuevos</p>
+                <p>Vuelve más tarde o añade productos nuevos(Necesitas ser Admin para eso)</p>
                 <c:if test="${sessionScope.usuario != null && sessionScope.usuario.isAdmin}">
                     <a href="formularioproducto.jsp" class="btn btn-recyclon mt-2">
                         <i class="bi bi-plus-circle"></i> Añadir Primer Producto

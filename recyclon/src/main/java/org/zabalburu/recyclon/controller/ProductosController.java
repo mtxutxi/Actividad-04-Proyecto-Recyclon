@@ -78,7 +78,7 @@ public class ProductosController extends HttpServlet {
 	}
 
 	private String buscarProducto(HttpServletRequest request, HttpServletResponse response) {
-		String producto = request.getParameter("producto");
+		String producto = request.getParameter("producto"); //Aqui le llegua lo que escribe el ususario en el recuadro de buscar
 		if(producto == null || producto.trim().isEmpty()) {//si producto es null, o quitando los espacios del principio y final esta vacio
 			mensajeCDI.setMessage("Debes introducir un termino de busqueda valido");
 			mensajeCDI.setRole("alert-danger");
