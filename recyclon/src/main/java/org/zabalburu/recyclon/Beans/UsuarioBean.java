@@ -19,7 +19,7 @@ public class UsuarioBean implements Serializable {
     private Usuario usuarioActual;
     private boolean autenticado = false;
     
-    // ⬇️ CAMBIO 1: Inyectar GestionService en lugar de crear un DAO
+    // CAMBIO 1: Inyectar GestionService en lugar de crear un DAO
     @Inject
     private GestionService service;
     
@@ -55,11 +55,15 @@ public class UsuarioBean implements Serializable {
      */
     public void nuevoUsuario(Usuario u, String password) {
         String passwordHash = PasswordUtil.hashPassword(password);
-        u.setPassword(passwordHash);
+        u.setContrasenaHash(passwordHash);
         u.setIsAdmin(false);
         
         service.nuevoUsuario(u);
         
+        //Este es el autologin:
+        //usuario rellena formulario de registro
+        //click en Registrarse
+        //registrado ya está dentro y usas la app no tienes que volver a hacer login
         this.nombreUsuario = u.getNombre();
         this.usuarioActual = u;
         this.autenticado = true;
