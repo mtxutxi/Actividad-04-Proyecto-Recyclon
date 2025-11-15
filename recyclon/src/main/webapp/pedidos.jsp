@@ -41,16 +41,16 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav ms-auto mb-2 mb-lg-0"> <!--ms-auto para desplazar-->
                   <li class="nav-item">
-                      <a class="nav-link active text-light" aria-current="page" href="#">Inicio</a>
+                      <a class="nav-link active text-light" href="index.jsp">Inicio</a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link active text-light" href="#">Usuario</a>
+                      <a class="nav-link active text-light" href="usuario.jsp">Usuario</a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link active text-light" href="#">Productos</a>
+                      <a class="nav-link active text-light" href="productos.jsp">Productos</a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link active text-light" href="#">Lineas Pedidos</a>
+                      <a class="nav-link active text-light" aria-currente="page" href="#">Pedidos</a>
                   </li>
               </ul>  
               

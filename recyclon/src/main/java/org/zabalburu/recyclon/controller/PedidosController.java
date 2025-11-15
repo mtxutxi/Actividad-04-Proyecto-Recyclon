@@ -27,6 +27,12 @@ public class PedidosController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		/**
+		 * 
+		 * Meter un verPedidosUsuario, que por id de ususario muestre los pedidos que teine, y si stan en proceso o finalizados
+		 * 
+		 * */
+		
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 

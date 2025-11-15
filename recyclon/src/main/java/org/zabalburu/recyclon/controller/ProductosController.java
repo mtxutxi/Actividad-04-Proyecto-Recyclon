@@ -98,15 +98,17 @@ public class ProductosController extends HttpServlet {
 	private String getCategoriaProducto(HttpServletRequest request, HttpServletResponse response) {
 		String strIdCategoria = request.getParameter("id");
 		Integer idCategoria = Integer.parseInt(strIdCategoria);
-		service.getCategoriaProducto(idCategoria);
-		return "preoductos.jsp";
+		List<Producto> listaProductos = service.getCategoriaProducto(idCategoria);
+		request.setAttribute("productosporcategoria", listaProductos);
+		return "productos.jsp";
 	}
 
 	private String getProducto(HttpServletRequest request, HttpServletResponse response) {
 		String strIdProducto = request.getParameter("id");
 		Integer idProducto = Integer.parseInt(strIdProducto);
-		service.getProducto(idProducto);
-		return "productos.jsp";
+		Producto producto = service.getProducto(idProducto);
+		request.setAttribute("detalleproducto", producto);//Ojo! que sin esto el jsp no lo ve!!!!!
+		return "detalleproducto.jsp";
 	}
 
 	private String eliminarProducto(HttpServletRequest request, HttpServletResponse response) {
