@@ -11,6 +11,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -46,6 +48,7 @@ public class Usuario implements Serializable {
 	@Column(
 			name = "f_nacimiento" //Nombre de la columna en la BBDD
 	)
+	@Temporal(TemporalType.DATE) //Para que solo guarde la fecha (En SQL Server también se guarda la hora)
 	private Date fechaNacimiento;
 	
 	@Column(

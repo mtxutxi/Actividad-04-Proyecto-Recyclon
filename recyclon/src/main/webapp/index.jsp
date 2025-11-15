@@ -59,8 +59,41 @@
         </div>
     </nav>
     
-    AQUI PUEDES LOGUEARTE O ACCEDER A LAS PESTAÑAS PARA VER PRODUCTOS SIN LOGUEARTE
-    
+<!--     AQUI PUEDES LOGUEARTE O ACCEDER A LAS PESTAÑAS PARA VER PRODUCTOS SIN LOGUEARTE -->
+    <div class="container mt-5">
+		<div class="row text-center">
+			<h1>Identifíquese</h1>
+		</div>
+		<c:if test="${! empty mensajeCDI.message }">
+			<div class="row">
+				<div class="col-3"></div>
+				<div class="col-6">
+					<div class="alert ${mensajeCDI.role }">${mensajeCDI.message }</div>
+				</div>
+			</div>
+		</c:if>
+		<div class="row">
+			<div class="col-3"></div>
+			<div class="col-6">
+				<form action="usuarios" method="post">
+					<div class="mb-3">
+						<label for="exampleInputEmail1" class="form-label">Email
+							address</label> <input type="email" class="form-control"
+							id="exampleInputEmail1" aria-describedby="emailHelp" name="email"
+							value="${param.email }">
+					</div>
+					<div class="mb-3">
+						<label for="exampleInputPassword1" class="form-label">Password</label>
+						<input type="password" class="form-control"
+							id="exampleInputPassword1" name="password">
+					</div>
+					<button type="submit" class="btn btn-primary" name="accion" value="login">Entrar</button>
+					<button type="submit" class="btn btn-info" name="accion" value="registro">Registrarse</button>
+				</form>
+			</div>
+		</div>
+	</div>
+	
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 
 </body>
