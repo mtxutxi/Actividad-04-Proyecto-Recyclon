@@ -46,13 +46,13 @@
                       <a class="nav-link active text-light"  href="index.jsp">Inicio</a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link active text-light" href="usuario.jsp">Usuario</a>
+                      <a class="nav-link active text-light" href="usuarios">Usuario</a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link active text-light" aria-current="page" href="#">Productos</a>
+                      <a class="nav-link active text-light" aria-current="page" href="productos">Productos</a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link active text-light" href="pedidos.jsp">Pedidos</a>
+                      <a class="nav-link active text-light" href="pedidos">Pedidos</a>
                   </li>
               </ul>  
               
@@ -60,7 +60,7 @@
         </div>
     </nav>
     <!-- CONTENIDO PRINCIPAL -->
-    <div class="container-fluid px-4">
+    <div class="container-fluid px-4 mt-5 pt-3">
         
         <!-- Mensajes -->
         <c:if test="${not empty mensaje.message}">
@@ -95,12 +95,12 @@
         <div class="col">
             <div class="card shadow-sm position-relative">
                 <!-- Badge de Stock -->
-                <span class="badge ${producto.stock > 0 ? 'bg-success' : 'bg-danger'}"> <!-- Si hay stock(verde) si no(rojo) -->
-                    <c:choose> <!-- if-else -->
-                        <c:when test="${producto.stock > 0}"> <!-- Si hay mas de 0 preoductos -->
-                            Stock: ${producto.stock} <!-- mostramos el numero de productos que hay -->
+                <span class="badge ${producto.stock > 0 ? 'bg-success' : 'bg-danger'}"> <%-- Si hay stock(verde) si no(rojo) --%>
+                    <c:choose> <%-- if-else --%>
+                        <c:when test="${producto.stock > 0}"> <%--Si hay mas de 0 preoductos --%>
+                            Stock: ${producto.stock} <<%--mostramos el numero de productos que hay --%>
                         </c:when>
-                        <c:otherwise> <!-- Si no, mostramos agotado -->
+                        <c:otherwise> <%-- Si no, mostramos agotado --%>
                             Agotado
                         </c:otherwise>
                     </c:choose>
@@ -108,10 +108,10 @@
 
                 <!-- Imagen usamos choose que equivale al if-else. Lo vamos a usar para que en caso de no haber imagen, muestre el tipico recuadro gris -->
                 <c:choose>
-                    <c:when test="${not empty producto.imagen}"> <!-- Esto es el if -->
+                    <c:when test="${not empty producto.imagen}"> <%-- Esto es el if --%>
                         <img src="imagenes/${producto.imagen}" class="card-img-top" alt="${producto.nombre}">
                     </c:when>
-                    <c:otherwise><!-- Esto es el else -->
+                    <c:otherwise><%--Esto es el else --%>
                         <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
                             <i class="bi bi-image text-white" style="font-size: 3rem;"></i>
                         </div>

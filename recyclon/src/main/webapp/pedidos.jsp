@@ -44,17 +44,16 @@
                       <a class="nav-link active text-light" href="index.jsp">Inicio</a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link active text-light" href="usuario.jsp">Usuario</a>
+                      <a class="nav-link active text-light" href="usuarios">Usuario</a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link active text-light" href="productos.jsp">Productos</a>
+                      <a class="nav-link active text-light" href="productos">Productos</a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link active text-light" aria-currente="page" href="#">Pedidos</a>
+                      <a class="nav-link active text-light" aria-currente="page" href="pedidos">Pedidos</a>
                   </li>
               </ul>  
               
-              accion ver para admin y user. si se usa el id del admin le salen absolutamente todos los pedidos. si meten el id de el ususario X, le muestra solo los suyos
               
           </div>
         </div>

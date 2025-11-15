@@ -82,15 +82,18 @@ public class ProductosController extends HttpServlet {
 		if(producto == null || producto.trim().isEmpty()) {//si producto es null, o quitando los espacios del principio y final esta vacio
 			mensajeCDI.setMessage("Debes introducir un termino de busqueda valido");
 			mensajeCDI.setRole("alert-danger");
+			request.setAttribute("productosporcategoria", service.getProductosPorCategoria());
 			return "productos.jsp";
 		}
 		List<Producto> listaProducto = service.buscarProducto(producto);
 		if(listaProducto.isEmpty()) {
 			mensajeCDI.setMessage("No hay ninguna coincidencia con su busqueda");
 			mensajeCDI.setRole("alert-danger");
+			request.setAttribute("productosporcategoria", service.getProductosPorCategoria());
 		}else {
 			mensajeCDI.setMessage("Se han encontrado" + listaProducto.size() + " resultados");
 			mensajeCDI.setRole("alert-danger");
+			request.setAttribute("productosporcategoria", listaProducto);
 		}
 		return "productos.jsp";
 	}
@@ -125,6 +128,7 @@ public class ProductosController extends HttpServlet {
 		service.eliminarProducto(id); //Eliminamos el producto
 		mensajeCDI.setMessage("Se ha eliminado el producto correctamente");
 		mensajeCDI.setRole("alert-success");
+		request.setAttribute("productosporcategoria", service.getProductosPorCategoria());
 		return "producto.jsp"; //retornamos a la pagina
 	}
 
@@ -174,7 +178,7 @@ public class ProductosController extends HttpServlet {
 	        mensajeCDI.setMessage("Error al modificar el producto");
 	        mensajeCDI.setRole("alert-danger");
 	    }
-	    
+	    request.setAttribute("productosporcategoria", service.getProductosPorCategoria());
 	    return "productos.jsp";
 	}
 
@@ -259,6 +263,7 @@ public class ProductosController extends HttpServlet {
 		//mostramos mensaje de exito
 		mensajeCDI.setRole("alert alert-success");
 		mensajeCDI.setMessage("¡Producto creado con exito!");
+		request.setAttribute("productosporcategoria", service.getProductosPorCategoria());
 		//volvemos a la pagina de inicio que nos mostrara la pagina con la lista actualizada
 		return "productos.jsp";
 	}

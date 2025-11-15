@@ -58,7 +58,7 @@
               <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                   <li class="nav-item"><a class="nav-link text-light" href="index.jsp">Inicio</a></li>
                   <li class="nav-item"><a class="nav-link text-light" href="usuarios">Usuario</a></li>
-                  <li class="nav-item"><a class="nav-link active text-light" href="productos">Productos</a></li>
+                  <li class="nav-item"><a class="nav-link text-light" href="productos">Productos</a></li>
                   <li class="nav-item"><a class="nav-link text-light" href="pedidos">Pedidos</a></li>
               </ul>
             </div>
