@@ -58,5 +58,45 @@
           </div>
         </div>
     </nav>
+    
+    
+<div class="container">
+
+    <h2 class="mb-4 text-center">Mis Pedidos</h2>
+
+   		 <!-- si NO hay pedidos -->
+		<c:if test="${empty pedidos}">
+		    <div class="alert alert-info text-center">
+		        No hay ningún pedido
+		    </div>
+		</c:if>
+	
+	    <!-- si hay pedidos: -->
+	    <c:if test="${not empty pedidos}"> 
+	        <table class="table table-striped table-bordered text-center">
+	            <thead>
+	                <tr>
+	                    <th>ID</th>
+	                    <th>Fecha</th>
+	                    <th>Estado</th>
+	                </tr>
+	            </thead>
+	            <tbody>
+	                <c:forEach var="pedido" items="${pedidos}">
+	                    <tr>
+	                        <td>${pedido.idPedido}</td>
+	                        <td>${pedido.fecha}</td>
+	                        <td>${pedido.estado}</td>	
+	                    </tr>
+	                </c:forEach>
+	            </tbody>
+	            
+	        </table>
+	    </c:if>
+
+</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
