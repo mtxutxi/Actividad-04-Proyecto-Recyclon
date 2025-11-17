@@ -93,12 +93,12 @@
 		<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4"> <!-- Cuantas columnas por fila según el tamaño de la pantalla -->
     	<c:forEach var="producto" items="${productosporcategoria}">
         <div class="col">
-            <div class="card shadow-sm position-relative">
+            <div class="card shadow-sm position-relative border-0">
                 <!-- Badge de Stock -->
-                <span class="badge ${producto.stock > 0 ? 'bg-success' : 'bg-danger'}"> <%-- Si hay stock(verde) si no(rojo) --%>
+                <span class="rounded-bottom-0 badge ${producto.stock > 0 ? 'bg-success' : 'bg-danger'}"> <%-- Si hay stock(verde) si no(rojo) --%>
                     <c:choose> <%-- if-else --%>
                         <c:when test="${producto.stock > 0}"> <%--Si hay mas de 0 preoductos --%>
-                            Stock: ${producto.stock} <<%--mostramos el numero de productos que hay --%>
+                            Stock: ${producto.stock} <%--mostramos el numero de productos que hay --%>
                         </c:when>
                         <c:otherwise> <%-- Si no, mostramos agotado --%>
                             Agotado
@@ -109,10 +109,10 @@
                 <!-- Imagen usamos choose que equivale al if-else. Lo vamos a usar para que en caso de no haber imagen, muestre el tipico recuadro gris -->
                 <c:choose>
                     <c:when test="${not empty producto.imagen}"> <%-- Esto es el if --%>
-                        <img src="imagenes/${producto.imagen}" class="card-img-top" alt="${producto.nombre}">
+                        <img src="imagenes/${producto.imagen}" class="card-img-top rounded-top-0 " alt="${producto.nombre}">
                     </c:when>
                     <c:otherwise><%--Esto es el else --%>
-                        <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
+                        <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center rounded-top-0 " style="height: 200px;">
                             <i class="bi bi-image text-white" style="font-size: 3rem;"></i>
                         </div>
                     </c:otherwise>
