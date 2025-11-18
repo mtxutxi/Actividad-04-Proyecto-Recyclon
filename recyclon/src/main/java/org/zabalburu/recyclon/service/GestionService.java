@@ -73,7 +73,7 @@ public class GestionService {
 	}
 	
 	public Pedido modificarPedido(Pedido modificado) {
-		return modificarPedido(modificado); // no seria pedidoDAO.modificarPedido(modificado)?¿ 
+		return pedidoDAO.modificarPedido(modificado);
 	}
 	
 	public Pedido getPedido(Integer id) {
