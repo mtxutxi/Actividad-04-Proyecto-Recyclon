@@ -7,6 +7,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -68,11 +70,16 @@ public class UsuarioController extends HttpServlet {
 			mensajeCDI.setRole("alert-danger");
 			return "index.jsp";
 		}
+		
+	    Usuario u = service.login(email, contraseña);
+	    
 		if (service.login(email, contraseña) == null) {
 			mensajeCDI.setMessage("Usuario / Contraseña Erróneos");
 			mensajeCDI.setRole("alert-danger");
 			return "index.jsp";
 		}
+	    HttpSession sesion = request.getSession();
+	    sesion.setAttribute("usuario", u);
 		return "controladorrecyclon";
 	}
 	
