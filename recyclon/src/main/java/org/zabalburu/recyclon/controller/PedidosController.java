@@ -89,39 +89,39 @@ public class PedidosController extends HttpServlet {
 protected void doPost(HttpServletRequest request, HttpServletResponse response) 
         throws ServletException, IOException {
     
-    HttpSession sesion = request.getSession();
-    Usuario usuario = (Usuario) sesion.getAttribute("usuario");
-    
-    if (usuario == null) {
-        response.sendRedirect("usuarios");
-        return;
-    }
-    //verifica que sea administrador
-    if (usuario.getIsAdmin() == null || !usuario.getIsAdmin()) {
-        response.sendRedirect("pedidos");
-        return;
-    }
-    //llama a la acccion de cambiar estado
-    String accion = request.getParameter("accion");
-    
-    if ("cambiarEstado".equals(accion)) {
-        String idPedidoStr = request.getParameter("idPedido");
-        String nuevoEstado = request.getParameter("estado");
-        
-        if (idPedidoStr != null && nuevoEstado != null && !nuevoEstado.isEmpty()) {
-            try {
-                Integer idPedido = Integer.parseInt(idPedidoStr);
-                service.estadoPedido(idPedido, nuevoEstado);
-                sesion.setAttribute("mensaje", "Estado actualizado correctamente");
-            } catch (NumberFormatException e) {
-                sesion.setAttribute("error", "ID de pedido invalido");
-            }
-        }
-        
-        response.sendRedirect("pedidos");
-            return;
-        }
-        
-        doGet(request, response);
+	    HttpSession sesion = request.getSession();
+	    Usuario usuario = (Usuario) sesion.getAttribute("usuario");
+	    
+	    if (usuario == null) {
+	        response.sendRedirect("usuarios");
+	        return;
+	    }
+	    //verifica que sea administrador
+	    if (usuario.getIsAdmin() == null || !usuario.getIsAdmin()) {
+	        response.sendRedirect("pedidos");
+	        return;
+	    }
+	    //llama a la acccion de cambiar estado
+	    String accion = request.getParameter("accion");
+	    
+	    if ("cambiarEstado".equals(accion)) {
+	        String idPedidoStr = request.getParameter("idPedido");
+	        String nuevoEstado = request.getParameter("estado");
+	        
+	        if (idPedidoStr != null && nuevoEstado != null && !nuevoEstado.isEmpty()) {
+	            try {
+	                Integer idPedido = Integer.parseInt(idPedidoStr);
+	                service.estadoPedido(idPedido, nuevoEstado);
+	                sesion.setAttribute("mensaje", "Estado actualizado correctamente");
+	            } catch (NumberFormatException e) {
+	                sesion.setAttribute("error", "ID de pedido invalido");
+	            }
+	        }
+	        
+	        response.sendRedirect("pedidos");
+	            return;
+	        }
+	        
+	        doGet(request, response);
     }
 }

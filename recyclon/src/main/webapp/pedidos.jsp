@@ -97,7 +97,7 @@
                                     <p>${pedido.estado}<p>
                                 </c:when>
                                 <c:otherwise>
-                                    <span class="badge bg-secondary">${pedido.estado}</span>
+                                    <span>${pedido.estado}</span>
                                 </c:otherwise>
                             </c:choose>
                         </td>                        
