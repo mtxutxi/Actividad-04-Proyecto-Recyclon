@@ -1,5 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,18 +8,19 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <script src="https://kit.fontawesome.com/f21170cf61.js" crossorigin="anonymous"></script>
-    <title>Bienvenida</title>
+    <title>Mis Pedidos</title>
     <style>
         :root {
 			--color-fondo: #EDE8DC;
-			--verde-oscuro:#93C572 ;
-			--verde-claro:rgba(147, 197, 114, 0.9);;
+			--verde-oscuro:#93C572;
+			--verde-claro:rgba(147, 197, 114, 0.9);
 		}
 
 		body{
 		    background-color: var(--color-fondo);
 		    margin:0 5px;
 		    padding: 0;
+		    padding-top: 70px; /* para que se me vea el titulo*/
 		}
         
         .navbar{background-color: var(--verde-oscuro);}
@@ -26,77 +28,139 @@
 </head>
 <body>
     <!-- BARRA DE NAVEGACION -->
-    <nav class="navbar navbar-expand-lg fixed-top "> 
+    <nav class="navbar navbar-expand-lg fixed-top"> 
         <div class="container-fluid">
-            <a class="navbar-brand text-light  ms-3" href="#"> 
+            <a class="navbar-brand text-light ms-3" href="index.jsp"> 
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-leaf" viewBox="0 0 16 16">
   					<path d="M1.4 1.7c.216.289.65.84 1.725 1.274 1.093.44 2.884.774 5.834.528l.37-.023c1.823-.06 3.117.598 3.956 1.579C14.16 6.082 14.5 7.41 14.5 8.5c0 .58-.032 1.285-.229 1.997q.198.248.382.54c.756 1.2 1.19 2.563 1.348 3.966a1 1 0 0 1-1.98.198c-.13-.97-.397-1.913-.868-2.77C12.173 13.386 10.565 14 8 14c-1.854 0-3.32-.544-4.45-1.435-1.125-.887-1.89-2.095-2.391-3.383C.16 6.62.16 3.646.509 1.902L.73.806zm-.05 1.39c-.146 1.609-.008 3.809.74 5.728.457 1.17 1.13 2.213 2.079 2.961.942.744 2.185 1.22 3.83 1.221 2.588 0 3.91-.66 4.609-1.445-1.789-2.46-4.121-1.213-6.342-2.68-.74-.488-1.735-1.323-1.844-2.308-.023-.214.237-.274.38-.112 1.4 1.6 3.573 1.757 5.59 2.045 1.227.215 2.21.526 3.033 1.158.058-.39.075-.782.075-1.158 0-.91-.288-1.988-.975-2.792-.626-.732-1.622-1.281-3.167-1.229l-.316.02c-3.05.253-5.01-.08-6.291-.598a5.3 5.3 0 0 1-1.4-.811"/>
 				</svg> 
-                <span>Recyclon </span>
+                <span>Recyclon</span>
             </a> 
             <button class="navbar-toggler bg-light bg-opacity-75" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
               aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav ms-auto mb-2 mb-lg-0"> <!--ms-auto para desplazar-->
+              <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                   <li class="nav-item">
-                      <a class="nav-link active text-light" href="index.jsp">Inicio</a>
+                      <a class="nav-link text-light" href="index.jsp">Inicio</a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link active text-light" href="usuarios">Usuario</a>
+                      <a class="nav-link text-light" href="usuarios">Usuario</a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link active text-light" href="productos">Productos</a>
+                      <a class="nav-link text-light" href="productos">Productos</a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link active text-light" aria-currente="page" href="pedidos">Pedidos</a>
+                      <a class="nav-link active text-light" href="pedidos">Pedidos</a>
                   </li>
-              </ul>  
-              
-              
+              </ul>
           </div>
         </div>
     </nav>
     
-    
-<div class="container">
-
+<div class="container mt-4">
     <h2 class="mb-4 text-center">Mis Pedidos</h2>
 
-   		 <!-- si NO hay pedidos -->
-		<c:if test="${empty pedidos}">
-		    <div class="alert alert-info text-center">
-		        No hay ningún pedido
-		    </div>
-		</c:if>
-	
-	    <!-- si hay pedidos: -->
-	    <c:if test="${not empty pedidos}"> 
-	        <table class="table table-striped table-bordered text-center">
-	            <thead>
-	                <tr>
-	                    <th>ID</th>
-	                    <th>Fecha</th>
-	                    <th>Estado</th>
-	                </tr>
-	            </thead>
-	            <tbody>
-	                <c:forEach var="pedido" items="${pedidos}">
-	                    <tr>
-	                        <td>${pedido.idPedido}</td>
-	                        <td>${pedido.fecha}</td>
-	                        <td>${pedido.estado}</td>	
-	                    </tr>
-	                </c:forEach>
-	            </tbody>
-	            
-	        </table>
-	    </c:if>
+    <!-- si NO hay pedidos -->
+    <c:if test="${empty pedidos}">
+        <div class="alert alert-info text-center">
+            No hay ningún pedido
+        </div>
+    </c:if>
 
+    <!-- si hay pedidos -->
+    <c:if test="${not empty pedidos}"> 
+        <table class="table table-striped table-bordered text-center">
+            <thead class="table-success">
+                <tr>
+                    <th>ID</th>
+                    <th>Fecha</th>
+                    <th>Estado</th>
+                    <th>Detalles</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach var="pedido" items="${pedidos}">
+                    <tr>
+                        <td>#${pedido.idPedido}</td>
+                        <td><fmt:formatDate value="${pedido.fecha}" pattern="dd/MM/yyyy HH:mm"/></td>
+                        <td>
+                            <c:choose>
+                                <c:when test="${pedido.estado == 'Pendiente'}">
+                                    <p>${pedido.estado}<p>
+                                </c:when>
+                                <c:when test="${pedido.estado == 'Enviado'}">
+                                    <p>${pedido.estado}</p>
+                                </c:when>
+                                <c:when test="${pedido.estado == 'Entregado'}">
+                                    <p>${pedido.estado}<p>
+                                </c:when>
+                                <c:otherwise>
+                                    <span>${pedido.estado}</span>
+                                </c:otherwise>
+                            </c:choose>
+                        </td>                        
+                        <td>
+                            <button class="btn btn-outline-success btn-sm" type="button" 
+                                    data-bs-toggle="collapse" data-bs-target="#detalle${pedido.idPedido}">
+                                <i class="bi bi-eye"></i> Ver Detalles
+                            </button>
+                        </td>	
+                    </tr>
+        <!-- collapse -->
+        <tr class="collapse" id="detalle${pedido.idPedido}">
+            <td colspan="4">
+                <div class="card card-body">
+                    <h6>Productos del Pedido: #${pedido.idPedido}</h6>
+                    <c:if test="${not empty pedido.lineasPedido}">
+                        <ul>
+                            <c:forEach var="linea" items="${pedido.lineasPedido}">
+                                <li>${linea.producto.nombre} - Cantidad: ${linea.cantidad} - Precio: ${producto.precio}€/></li>
+                            </c:forEach>
+                        </ul>
+                    </c:if>
+                    <hr>
+                    <c:if test="${empty pedido.lineasPedido}">
+                        <p>Sin productos</p>
+                    </c:if>
+                    
+                    <!-- formulario cambiar estado (solo admin) -->
+                    <c:if test="${sessionScope.usuario.isAdmin}">
+                        <hr>
+                        <form method="post" action="pedidos" class="row g-3 align-items-center">
+                            <input type="hidden" name="accion" value="cambiarEstado">
+                            <input type="hidden" name="idPedido" value="${pedido.idPedido}">
+                            
+                            <div class="col-auto">
+                                <label for="estado${pedido.idPedido}" class="col-form-label">
+                                 Cambiar estado:
+                                </label>
+                            </div>
+                            <div class="col-auto">
+	                                <select class="form-select form-select-sm" id="estado${pedido.idPedido}" name="estado">
+	                                    <option value="Pendiente" ${pedido.estado == 'Pendiente' ? 'selected' : ''}>Pendiente</option>
+	                                    <option value="Enviado" ${pedido.estado == 'Enviado' ? 'selected' : ''}>Enviado</option>
+	                                    <option value="Entregado" ${pedido.estado == 'Entregado' ? 'selected' : ''}>Entregado</option>
+	                                    <option value="Cancelado" ${pedido.estado == 'Cancelado' ? 'selected' : ''}>Cancelado</option>
+	                                </select>
+                            </div>
+                            <div class="col-auto">
+                                <button type="submit" class="btn btn-sm bg-success text-white">
+                                 Actualizar
+                                </button>
+                               </div>
+                               </form>
+                               </c:if>
+                            </div>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
+    </c:if>
 </div>
 
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
