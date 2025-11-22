@@ -16,58 +16,60 @@ import org.zabalburu.recyclon.modelo.Pedido;
 import org.zabalburu.recyclon.modelo.Usuario;
 import org.zabalburu.recyclon.service.GestionService;
 
-	/**
-	 * Servlet implementation class PedidosController
-	 */
-	@WebServlet("/pedidos")
-	public class PedidosController extends HttpServlet {
-		private static final long serialVersionUID = 1L;
-		
-		@Inject
-		private GestionService service;
-	       
-	    /**
-	     * @see HttpServlet#HttpServlet()
-	     */
-	    public PedidosController() {
-	        super();
-	        // TODO Auto-generated constructor stub
-	    }
+/**
+ * Servlet implementation class PedidosController
+ */
+@WebServlet("/pedidos")
+public class PedidosController extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+    
+    @Inject
+    private GestionService service;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public PedidosController() {
+        super();
+    }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	    
-
-        //quizas meterle una accion ver detalle(?)
-	    
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         HttpSession sesion = request.getSession();
         Usuario usuario = (Usuario) sesion.getAttribute("usuario");
 
-        // si no está logueado hacia login
+        // si no está logueado redirige al login
         if (usuario == null) {
             response.sendRedirect("usuarios");
             return;
         }
-
-        List<Pedido> pedidosUsuario;
-
-        if (usuario.getIsAdmin() != null && usuario.getIsAdmin()) { //admin ve todos los pedidos de la app
-            pedidosUsuario = service.getPedidos();
-
-        } else {
-            pedidosUsuario = verPedidosUsuario(usuario.getIdUsuario()); //user normal ve los suyos
-        }
-
-        request.setAttribute("pedidos", pedidosUsuario);
-        request.getRequestDispatcher("pedidos.jsp").forward(request, response);
+        
+        // lista pedidos en el verdetalels
+        String pagina = listarPedidos(request, usuario);
+        request.getRequestDispatcher(pagina).forward(request, response);
     }
 
+    //lkista todos los pedidos de la app en admin o solo los del usuario
+    private String listarPedidos(HttpServletRequest request, Usuario usuario) {
+        List<Pedido> pedidosUsuario;
+        
+        if (usuario.getIsAdmin() != null && usuario.getIsAdmin()) {
+            // admin ve todos los pedidos de la app
+            pedidosUsuario = service.getPedidos();
+        } else {
+            // usuario normal ve solo los suyos
+            pedidosUsuario = verPedidosUsuario(usuario.getIdUsuario());
+        }
+        
+        request.setAttribute("pedidos", pedidosUsuario);
+        return "pedidos.jsp";
+    }
 
-    //solo pedidos usuario
+    // filtra solo los pedidos del usuario
     private List<Pedido> verPedidosUsuario(Integer idUsuario) {
         List<Pedido> listaPedidos = service.getPedidos();
         List<Pedido> pedidosUsuario = new ArrayList<>();
@@ -81,12 +83,11 @@ import org.zabalburu.recyclon.service.GestionService;
         return pedidosUsuario;
     }
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
-
+    /**
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+     */
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        doGet(request, response);
+    }
 }
