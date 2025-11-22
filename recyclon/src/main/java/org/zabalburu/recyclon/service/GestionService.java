@@ -84,6 +84,14 @@ public class GestionService {
 		return pedidoDAO.getPedidos();
 	}
 	
+	public void estadoPedido(Integer idPedido, String nuevoEstado) {
+	    Pedido pedido = pedidoDAO.getPedido(idPedido);
+	    if (pedido != null) {
+	        pedido.setEstado(nuevoEstado);
+	        pedidoDAO.modificarPedido(pedido);
+	    }
+	}
+	
 	//PRODUCTO//
 	public Producto nuevoProducto(Producto nuevo) {
 		return productoDAO.nuevoProducto(nuevo);

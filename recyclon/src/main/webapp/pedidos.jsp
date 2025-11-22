@@ -108,21 +108,50 @@
                             </button>
                         </td>	
                     </tr>
-                    <!-- collapse -->
-                    <tr class="collapse" id="detalle${pedido.idPedido}">
-                        <td colspan="4">
-                            <div class="card card-body">
-                                <h6> Productos del Pedido: #${pedido.idPedido}</h6>
-                                <c:if test="${not empty pedido.lineasPedido}">
-                                    <ul>
-                                        <c:forEach var="linea" items="${pedido.lineasPedido}">
-                                            <li>${linea.producto.nombre} - Cantidad: ${linea.cantidad} - Precio: <fmt:formatNumber value="${linea.precio}" type="currency" currencySymbol="€"/></li>
-                                        </c:forEach>
-                                    </ul>
-                                </c:if>
-                                <c:if test="${empty pedido.lineasPedido}">
-                                    <p>Sin productos</p>
-                                </c:if>
+        <!-- collapse -->
+        <tr class="collapse" id="detalle${pedido.idPedido}">
+            <td colspan="4">
+                <div class="card card-body">
+                    <h6>Productos del Pedido: #${pedido.idPedido}</h6>
+                    <c:if test="${not empty pedido.lineasPedido}">
+                        <ul>
+                            <c:forEach var="linea" items="${pedido.lineasPedido}">
+                                <li>${linea.producto.nombre} - Cantidad: ${linea.cantidad} - Precio: ${producto.precio}€/></li>
+                            </c:forEach>
+                        </ul>
+                    </c:if>
+                    <hr>
+                    <c:if test="${empty pedido.lineasPedido}">
+                        <p>Sin productos</p>
+                    </c:if>
+                    
+                    <!-- formulario cambiar estado (solo admin) -->
+                    <c:if test="${sessionScope.usuario.isAdmin}">
+                        <hr>
+                        <form method="post" action="pedidos" class="row g-3 align-items-center">
+                            <input type="hidden" name="accion" value="cambiarEstado">
+                            <input type="hidden" name="idPedido" value="${pedido.idPedido}">
+                            
+                            <div class="col-auto">
+                                <label for="estado${pedido.idPedido}" class="col-form-label">
+                                 Cambiar estado:
+                                </label>
+                            </div>
+                            <div class="col-auto">
+	                                <select class="form-select form-select-sm" id="estado${pedido.idPedido}" name="estado">
+	                                    <option value="Pendiente" ${pedido.estado == 'Pendiente' ? 'selected' : ''}>Pendiente</option>
+	                                    <option value="Enviado" ${pedido.estado == 'Enviado' ? 'selected' : ''}>Enviado</option>
+	                                    <option value="Entregado" ${pedido.estado == 'Entregado' ? 'selected' : ''}>Entregado</option>
+	                                    <option value="Cancelado" ${pedido.estado == 'Cancelado' ? 'selected' : ''}>Cancelado</option>
+	                                </select>
+                            </div>
+                            <div class="col-auto">
+                                <button type="submit" class="btn btn-sm bg-success text-white">
+                                 Actualizar
+                                </button>
+                               </div>
+                               </form>
+                               </c:if>
                             </div>
                         </td>
                     </tr>
