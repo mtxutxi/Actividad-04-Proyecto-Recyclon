@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-    <title>${empty producto ? 'Nuevo' : 'Modificar'} Producto</title>
+    <title>Recyclon - ${empty producto ? 'Nuevo' : 'Modificar'} Producto</title>
     <style>
         :root {
             --color-fondo: #EDE8DC;
@@ -57,8 +57,8 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                   <li class="nav-item"><a class="nav-link text-light" href="index.jsp">Inicio</a></li>
-                  <li class="nav-item"><a class="nav-link text-light" href="controladorrecyclon">Usuario</a></li>
-                  <li class="nav-item"><a class="nav-link active text-light fw-bold" aria-current="page" href="productos">Productos</a></li>
+                  <li class="nav-item"><a class="nav-link text-light" href="usuarios">Usuario</a></li>
+                  <li class="nav-item"><a class="nav-link text-light" href="productos">Productos</a></li>
                   <li class="nav-item"><a class="nav-link text-light" href="pedidos">Pedidos</a></li>
               </ul>
             </div>

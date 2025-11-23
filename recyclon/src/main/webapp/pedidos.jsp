@@ -46,15 +46,17 @@
                       <a class="nav-link text-light" href="index.jsp">Inicio</a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link text-light" href="controladorrecyclon">Usuario</a>
+                      <a class="nav-link active text-light" href="usuarios">Usuario</a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link text-light" href="productos">Productos</a>
+                      <a class="nav-link active text-light" href="productos">Productos</a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link active text-light fw-bold" aria-current="page" href="pedidos">Pedidos</a>
+                      <a class="nav-link active text-light" aria-currente="page" href="pedidos">Pedidos</a>
                   </li>
-              </ul>
+              </ul>  
+              
+              
           </div>
         </div>
     </nav>

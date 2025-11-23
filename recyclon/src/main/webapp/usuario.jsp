@@ -47,7 +47,7 @@
                       <a class="nav-link active text-light" href="index.jsp">Inicio</a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link active text-light fw-bold" aria-current="page" href="controladorrecyclon">Usuario</a>
+                      <a class="nav-link active text-light" aria-current="page" href="usuarios">Usuario</a>
                   </li>
                   <li class="nav-item">
                       <a class="nav-link active text-light" href="productos">Productos</a>
@@ -90,7 +90,7 @@
                         </div>
                     </div>
                     <div class="container-fluid  justify-content-center align-items-center mt-5">
-                    	<a class="btn btn-outline-success rounded" href="pedidos">Ver Pedidos</a>
+                    	<a class="btn btn-outline-success rounded" href="pedidos?accion=verPedidosUsuario">Ver Pedidos</a>
                     </div>
                 </div>
             </div>
