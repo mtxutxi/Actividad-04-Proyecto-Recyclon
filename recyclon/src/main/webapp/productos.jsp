@@ -126,7 +126,7 @@
                     </span>
 
                     <div class="d-grid gap-2 mt-2">
-                        <a href="productos?accion=getproducto&id=${producto.id}" class="btn btn-outline-success btn-sm"> <!-- Aqui va al producto del id -->
+                        <a href="productos?accion=getproducto&id=${producto.idProducto}" class="btn btn-outline-success btn-sm"> <!-- Aqui va al producto del id -->
                             <i class="bi bi-eye"></i> Ver Detalles
                         </a>
                     </div>
