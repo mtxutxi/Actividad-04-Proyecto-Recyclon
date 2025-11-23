@@ -133,12 +133,11 @@
         			<td colspan="4">
         		</c:otherwise>
         	</c:choose>
-                <div class="card card-body">
                     <h6>Productos del Pedido: #${pedido.idPedido}</h6>
                     <c:if test="${not empty pedido.lineasPedido}">
-                        <ul>
+                        <ul class="list-group text-center">
                             <c:forEach var="linea" items="${pedido.lineasPedido}">
-                                <li>${linea.producto.nombre} - Cantidad: ${linea.cantidad} - Precio: ${linea.producto.precio}€/></li>
+                                <li class="list-group-item">${linea.producto.nombre} - Cantidad: ${linea.cantidad} - Precio: <fmt:formatNumber value="${linea.producto.precio}" type="currency" currencySymbol="€"/></li>
                             </c:forEach>
                         </ul>
                     </c:if>
@@ -174,7 +173,6 @@
                                </div>
                                </form>
                                </c:if>
-                            </div>
                         </td>
                     </tr>
                 </c:forEach>
