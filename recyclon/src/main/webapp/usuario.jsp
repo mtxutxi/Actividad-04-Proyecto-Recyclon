@@ -1,6 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!-- BARRA DE NAVEGACION -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -53,8 +51,8 @@
                                     <li>Fecha de Nacimiento: ${usuario.fechaNacimiento}</li>
                                     <li>Documento identidad: ${usuario.documentoIdentidad}</li>
                                     <li>Correo electronico: ${usuario.email}</li>
-                                    <li>DirecciÃ³n de envio: ${usuario.direccionEnvio}</li>
-                                    <li>DirecciÃ³n de FacturaciÃ³n: ${usuario.direccionFacturacion}</li>
+                                    <li>Dirección de envio: ${usuario.direccionEnvio}</li>
+                                    <li>Dirección de Facturación: ${usuario.direccionFacturacion}</li>
                                  </ul>
             				</div>
                         </div>

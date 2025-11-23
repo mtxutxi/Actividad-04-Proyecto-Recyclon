@@ -135,6 +135,8 @@ public class ProductosController extends HttpServlet {
 	
 	private String añadirAlCarrito(HttpServletRequest request, HttpServletResponse response) {
 	    System.out.println("AÑADIR CARRITO");
+	    HttpSession sesion = request.getSession();
+
 	    
 	    try {
 
@@ -177,6 +179,8 @@ public class ProductosController extends HttpServlet {
 	        cesta.añadirProducto(idProducto, cantidad);
 	        
 	        System.out.println("añadido exitosamente");
+	        
+	        sesion.setAttribute("mensaje", "Producto añadido al carrito");
 	        
 	        mensajeCDI.setMessage("Producto añadido al carrito");
 	        mensajeCDI.setRole("alert-success");

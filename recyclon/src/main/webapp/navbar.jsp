@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!-- BARRA DE NAVEGACION -->
 <nav class="navbar navbar-expand-lg fixed-top" style="background-color: #93C572;">
     <div class="container-fluid">
@@ -7,8 +9,6 @@
             </svg>
             <span>Recyclon</span>
         </a>
-
-        <!-- CARRITO EN M”VIL - Visible al lado de la hamburguesa -->
         <a href="productos?accion=vercarrito" class="text-light ms-auto me-3 d-lg-none position-relative" style="font-size: 1.5rem; text-decoration: none;">
             <i class="bi bi-cart3"></i>
             <c:if test="${cesta.totalProductos > 0}">
@@ -17,7 +17,11 @@
                 </span>
             </c:if>
         </a>
-
+		<!-- DARK MODO 
+		<button id="theme-btn-mobile" class="btn btn-sm btn-outline-light me-2 d-lg-none">
+		    <i class="bi bi-moon-fill"></i>
+		</button>-->
+       
         <button class="navbar-toggler bg-light bg-opacity-75" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
           aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -37,7 +41,6 @@
               <li class="nav-item">
                   <a class="nav-link text-light" href="pedidos">Pedidos</a>
               </li>
-              <!-- CARRITO EN PANTALLAS GRANDES - Solo visible en desktop -->
               <li class="nav-item d-none d-lg-block">
                   <a class="nav-link text-light position-relative" href="productos?accion=vercarrito">
                       <i class="bi bi-cart3"></i> Carrito
@@ -48,8 +51,60 @@
                       </c:if>
                   </a>
               </li>
+			  <!-- BTN DARK MODO 
+			<li class="nav-item d-none d-lg-block">
+			    <button id="theme-btn-desktop" class="btn btn-sm btn-outline-light ms-2">
+			        <i class="bi bi-moon-fill"></i>
+			    </button>
+			</li>-->
           </ul>
       </div>
      </div>
 </nav>
+
+<!-- TOSTADAS -->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999;">
+    <c:if test="${not empty sessionScope.mensaje}">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill"></i> ${sessionScope.mensaje}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <c:remove var="mensaje" scope="session"/>
+    </c:if>
+    
+    <c:if test="${not empty sessionScope.error}">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle-fill"></i> ${sessionScope.error}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <c:remove var="error" scope="session"/>
+    </c:if>
+</div>
 <div style="margin-top: 70px;"></div>
+
+<!-- JS PARA EL DARK MODO 
+<script>
+// Obtener tema guardado usa 'light' por defecto
+let tema = localStorage.getItem('tema') || 'light';
+
+document.documentElement.setAttribute('data-bs-theme', tema);
+
+// Actualizar icono seg√∫n el tema
+function actualizarIcono() {
+    let icono = tema === 'dark' ? 'bi-sun-fill' : 'bi-moon-fill';
+    document.querySelectorAll('#theme-btn-mobile i, #theme-btn-desktop i').forEach(function(i) {
+        i.className = 'bi ' + icono;
+    });
+}
+actualizarIcono();
+
+function cambiarTema() {
+    tema = tema === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-bs-theme', tema);
+    localStorage.setItem('tema', tema);
+    actualizarIcono();
+}
+
+document.getElementById('theme-btn-mobile').onclick = cambiarTema;
+document.getElementById('theme-btn-desktop').onclick = cambiarTema;
+</script>-->
