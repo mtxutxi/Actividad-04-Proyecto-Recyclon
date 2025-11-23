@@ -9,7 +9,7 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <script src="https://kit.fontawesome.com/f21170cf61.js" crossorigin="anonymous"></script>
-    <title>Bienvenida</title>
+    <title>Productos</title>
     <style>
         :root {
 			--color-fondo: #EDE8DC;
@@ -95,7 +95,7 @@
         <div class="col">
             <div class="card shadow-sm position-relative">
                 <!-- Badge de Stock -->
-                <span class="badge ${producto.stock > 0 ? 'bg-success' : 'bg-danger'}"> <%-- Si hay stock(verde) si no(rojo) --%>
+                <span class="badge ${producto.stock > 0 ? 'bg-success' : 'bg-danger'} rounded-bottom-0"> <%-- Si hay stock(verde) si no(rojo) --%>
                     <c:choose> <%-- if-else --%>
                         <c:when test="${producto.stock > 0}"> <%--Si hay mas de 0 preoductos --%>
                             Stock: ${producto.stock} <<%--mostramos el numero de productos que hay --%>
@@ -112,7 +112,7 @@
                         <img src="imagenes/${producto.imagen}" class="card-img-top" alt="${producto.nombre}">
                     </c:when>
                     <c:otherwise><%--Esto es el else --%>
-                        <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
+                        <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center  rounded-top-0" style="height: 200px;">
                             <i class="bi bi-image text-white" style="font-size: 3rem;"></i>
                         </div>
                     </c:otherwise>
