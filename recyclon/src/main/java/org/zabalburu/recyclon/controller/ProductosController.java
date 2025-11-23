@@ -5,12 +5,14 @@ import java.io.IOException;
 import java.util.List;
 
 import org.zabalburu.recyclon.cdi.MensajeCDI;
+import org.zabalburu.recyclon.modelo.Categoria;
 import org.zabalburu.recyclon.modelo.Producto;
 import org.zabalburu.recyclon.modelo.Usuario;
 import org.zabalburu.recyclon.service.GestionService;
 
 import jakarta.inject.Inject;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,6 +24,7 @@ import jakarta.servlet.http.Part;
  * Servlet implementation class ProductosController
  */
 @WebServlet("/productos")
+@MultipartConfig(maxFileSize = 1024 * 1024 * 5) // 5MB max
 public class ProductosController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -54,7 +57,8 @@ public class ProductosController extends HttpServlet {
 				}else {/*Ahora vamos a meter las acciones que requieren intervención del usuario, que no son de mostrar y listo.*/
 					switch (accion.toLowerCase()) {
 						case "nuevoproducto": 
-							pagina = nuevoProducto(request,response);//Necesita permisos de Admin
+							request.setAttribute("categorias", service.getCategorias());
+							pagina = "formularioproducto.jsp";
 							break;
 						case "modificarproducto":
 							pagina = modificarProducto(request,response);//Necesita permisos de Admin
@@ -129,151 +133,217 @@ public class ProductosController extends HttpServlet {
 		mensajeCDI.setMessage("Se ha eliminado el producto correctamente");
 		mensajeCDI.setRole("alert-success");
 		request.setAttribute("productosporcategoria", service.getProductosPorCategoria());
-		return "producto.jsp"; //retornamos a la pagina
+		return "productos.jsp"; //retornamos a la pagina
 	}
 
 	private String modificarProducto(HttpServletRequest request, HttpServletResponse response) {
-		//Verificamos la sesionsesion
-		HttpSession sesion = request.getSession();
-	    Usuario usuario = (Usuario) sesion.getAttribute("usuario");
-	    //Si no hay sesion iniciada  o esta iniciada pero no es Admin, le llevamos a la pagina de registro
-	    if (usuario == null || !usuario.getIsAdmin()) {
-	    	mensajeCDI.setMessage("La operación requiere permisos de administrador.");
-	    	mensajeCDI.setRole("alert-danger");
-	    	return "index.jsp"; //en el index esta el logueo
-	    }
-	    
-	    //Primero obtenemos los datos del formulario y validamos que exista el producto por su id
-	    String strIdProducto = request.getParameter("id");
-	    Integer idProducto = Integer.parseInt(strIdProducto);
+		String strIdProducto = request.getParameter("id");
+		Integer idProducto = Integer.parseInt(strIdProducto);
 	    Producto producto = service.getProducto(idProducto);
-	    if(producto == null) { //Si es null
-	    	mensajeCDI.setMessage("Introduzca un id que exista");
-			mensajeCDI.setRole("alert-danger");
-			return "producto.jsp";
-	    }
-	    //Si existe, te da el producto y continuamos
-	    String nombre = request.getParameter("nombre");
-	    String descripcion = request.getParameter("descripcion");
-	    String strPrecio = request.getParameter("precio");
-	    String strStock = request.getParameter("stock");
-	    Double precio = Double.parseDouble(strPrecio);
-	    Integer stock = Integer.parseInt(strStock);
-	    
-	    //Ahora le pasamos los datos del formulario al producto
-	    producto.setNombre(nombre);
-	    producto.setDescripcion(descripcion);
-	    producto.setPrecio(precio);
-	    producto.setStock(stock);
-	    
-	    //Lo guardamos en la BBDD
-	    service.modificarProducto(producto);
-	    
-	    
-	    //Si tenemos exito
-	    if(producto != null) {
-	        mensajeCDI.setMessage("Producto modificado correctamente");
-	        mensajeCDI.setRole("alert-success");
-	    } else {
-	        mensajeCDI.setMessage("Error al modificar el producto");
-	        mensajeCDI.setRole("alert-danger");
-	    }
-	    request.setAttribute("productosporcategoria", service.getProductosPorCategoria());
-	    return "productos.jsp";
+	    request.setAttribute("producto", producto);
+	    request.setAttribute("categorias", service.getCategorias());
+	    return "formularioproducto.jsp";
 	}
-
-	private String nuevoProducto(HttpServletRequest request, HttpServletResponse response) {
-		//Verificamos sesion
-		HttpSession sesion = request.getSession();
-	    Usuario usuario = (Usuario) sesion.getAttribute("usuario");
-	    //Si no hay sesion iniciada  o esta iniciada pero no es Admin, le llevamos a la pagina de registro
-	    if (usuario == null || !usuario.getIsAdmin()) {
-	    	mensajeCDI.setMessage("La operación requiere permisos de administrador.");
-	    	mensajeCDI.setRole("alert-danger");
-	    	return "index.jsp"; //en el index esta el logueo
-	    }
-		
-		//Obtiene el parametro del formulario y lo guarda en una variable para manejar esos datos
-		String nombre = request.getParameter("nombre");
-		String descripcion = request.getParameter("descripcion");
-		String categoria = request.getParameter("categoria");
-		String strPrecio = request.getParameter("precio");
-		String strStock = request.getParameter("stock");
-		
-		//Ahora vamos a parsear los datos que hemos recibido de string a double e integer
-		Double precio = 0.0;
-		Integer stock = 0;
-		try {
-			precio = Double.parseDouble(strPrecio); //pasamos el string a double y lo guardamos en la variable prescio
-			stock = Integer.parseInt(strStock);
-		}catch(NumberFormatException e) {
-			//Si meten mal el dato por que la gente es así.. les damos un mensajito simpatico
-			mensajeCDI.setRole("alert alert-danger");
-			mensajeCDI.setMessage("Introduzca un valor valido");
-			return "producto.jsp"; //volvemos a la pagina para qu elo intetne de nuevo
-		}
-		//AÑadimos imagen del producto
-		String uploadPath = getServletContext().getRealPath("") + File.separator + "imagenes";
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists())
-            uploadDir.mkdir();
-		String fileName = "";
-		Part part;
-		try {
-			part = request.getPart("imagen");
-			fileName = part.getSubmittedFileName();
-			if (fileName != null) {
-		    	part.write(uploadPath + File.separator + fileName);
-		    }
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ServletException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		//Comprobamos que el precio sea mayor que cero,si no, mandamos mensaje
-		if(precio <= 0) {
-			mensajeCDI.setRole("alert alert-danger");
-			mensajeCDI.setMessage("Introduzca un importe mayor que cero");
-			return "producto.jsp";
-		}
-		
-		//HAcemos lo mismo con stock
-		if(stock <= 0) {
-			mensajeCDI.setRole("alert alert-danger");
-			mensajeCDI.setMessage("Introduzca un numero superior a cero");
-			return "producto.jsp";
-		}
-		//CREAMOS EL NUEVO PRODUCTO y le asignamos sus atributos conseguidos con el formulario
-		Producto producto = new Producto();
-		producto.setNombre(nombre);
-		producto.setDescripcion(descripcion);
-		producto.setCategoria(null);
-		producto.setPrecio(precio); //Aqui ya estan bien parseados
-		producto.setStock(stock);
-		if (! fileName.isBlank()) {
-			producto.setImagen(fileName);
-		}
-		
-		//LLAMAMOS AL SERVICE y le pasamos el nuevo producto para que lo inserte en la BBDD
-		service.nuevoProducto(producto);
-		
-		//mostramos mensaje de exito
-		mensajeCDI.setRole("alert alert-success");
-		mensajeCDI.setMessage("¡Producto creado con exito!");
-		request.setAttribute("productosporcategoria", service.getProductosPorCategoria());
-		//volvemos a la pagina de inicio que nos mostrara la pagina con la lista actualizada
-		return "productos.jsp";
-	}
+	
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		String pagina = null;
+		String accion = request.getParameter("accion");
+		if(accion == null) {
+			request.setAttribute("categorias", service.getCategorias());
+			pagina = "formularioproducto.jsp";
+		}else {
+			switch (accion.toLowerCase()) {
+				case "productoformulario":
+					pagina = productoFormulario(request); //Método addToCesta
+					break;
+				case "productonuevo":
+					pagina = crearProducto(request);
+					break;
+			}
+		}
+		request.getRequestDispatcher(pagina).forward(request, response);			
 	}
 
+	
+	private String crearProducto(HttpServletRequest request) {
+		HttpSession sesion = request.getSession();
+	    Usuario usuario = (Usuario) sesion.getAttribute("usuario");
+	    
+	    if (usuario == null || !usuario.getIsAdmin()) {
+	    	mensajeCDI.setMessage("La operación requiere permisos de administrador.");
+	    	mensajeCDI.setRole("alert-danger");
+	    	return "index.jsp";
+	    }
+		
+		String nombre = request.getParameter("nombre");
+		String descripcion = request.getParameter("descripcion");
+		String categoriaId = request.getParameter("categoria");
+		String strPrecio = request.getParameter("precio");
+		String strStock = request.getParameter("stock");
+		
+		Double precio = 0.0;
+		Integer stock = 0;
+		try {
+			precio = Double.parseDouble(strPrecio);
+			stock = Integer.parseInt(strStock);
+		} catch(NumberFormatException e) {
+			mensajeCDI.setRole("alert-danger");
+			mensajeCDI.setMessage("Introduzca valores numéricos válidos");
+			request.setAttribute("categorias", service.getCategorias());
+			return "formularioproducto.jsp";
+		}
+		
+		if(precio <= 0) {
+			mensajeCDI.setRole("alert-danger");
+			mensajeCDI.setMessage("Introduzca un precio mayor que cero");
+			request.setAttribute("categorias", service.getCategorias());
+			return "formularioproducto.jsp";
+		}
+		
+		if(stock < 0) {
+			mensajeCDI.setRole("alert-danger");
+			mensajeCDI.setMessage("El stock no puede ser negativo");
+			request.setAttribute("categorias", service.getCategorias());
+			return "formularioproducto.jsp";
+		}
+		
+		// Procesar imagen
+		String fileName = procesarImagen(request);
+		
+		// Crear producto
+		Categoria categoria = service.getCategoria(Integer.parseInt(categoriaId));
+		Producto producto = new Producto();
+		producto.setNombre(nombre);
+		producto.setDescripcion(descripcion);
+		producto.setCategoria(categoria);
+		producto.setPrecio(precio);
+		producto.setStock(stock);
+		if (!fileName.isBlank()) {
+			producto.setImagen(fileName);
+		}
+		
+		service.nuevoProducto(producto);
+		
+		mensajeCDI.setRole("alert-success");
+		mensajeCDI.setMessage("¡Producto creado con éxito!");
+		request.setAttribute("productosporcategoria", service.getProductosPorCategoria());
+		return "productos.jsp";
+	}
+
+	private String productoFormulario(HttpServletRequest request) {
+		HttpSession sesion = request.getSession();
+	    Usuario usuario = (Usuario) sesion.getAttribute("usuario");
+	    
+	    if (usuario == null || !usuario.getIsAdmin()) {
+	    	mensajeCDI.setMessage("La operación requiere permisos de administrador.");
+	    	mensajeCDI.setRole("alert-danger");
+	    	return "index.jsp";
+	    }
+	    
+	    try {
+	    	// Obtener ID del producto
+	    	String strIdProducto = request.getParameter("id");
+	    	if (strIdProducto == null || strIdProducto.isEmpty()) {
+	    		mensajeCDI.setMessage("ID de producto no especificado");
+	    		mensajeCDI.setRole("alert-danger");
+	    		request.setAttribute("productosporcategoria", service.getProductosPorCategoria());
+	    		return "productos.jsp";
+	    	}
+	    	
+	    	Integer idProducto = Integer.parseInt(strIdProducto);
+	    	Producto producto = service.getProducto(idProducto);
+	    	
+	    	if(producto == null) {
+	    		mensajeCDI.setMessage("El producto no existe");
+	    		mensajeCDI.setRole("alert-danger");
+	    		request.setAttribute("productosporcategoria", service.getProductosPorCategoria());
+	    		return "productos.jsp";
+	    	}
+	    	
+	    	// Obtener datos del formulario
+	    	String nombre = request.getParameter("nombre");
+	    	String descripcion = request.getParameter("descripcion");
+	    	String strCategoriaId = request.getParameter("categoria");
+	    	String strPrecio = request.getParameter("precio");
+	    	String strStock = request.getParameter("stock");
+	    	
+	    	Double precio = Double.parseDouble(strPrecio);
+	    	Integer stock = Integer.parseInt(strStock);
+	    	Integer categoriaId = Integer.parseInt(strCategoriaId);
+	    	
+	    	if(precio <= 0) {
+	    		mensajeCDI.setMessage("Introduzca un precio mayor que cero");
+	    		mensajeCDI.setRole("alert-danger");
+	    		request.setAttribute("producto", producto);
+	    		request.setAttribute("categorias", service.getCategorias());
+	    		return "formularioproducto.jsp";
+	    	}
+	    	
+	    	if(stock < 0) {
+	    		mensajeCDI.setMessage("El stock no puede ser negativo");
+	    		mensajeCDI.setRole("alert-danger");
+	    		request.setAttribute("producto", producto);
+	    		request.setAttribute("categorias", service.getCategorias());
+	    		return "formularioproducto.jsp";
+	    	}
+	    	
+	    	// Actualizar producto
+	    	producto.setNombre(nombre);
+	    	producto.setDescripcion(descripcion);
+	    	producto.setPrecio(precio);
+	    	producto.setStock(stock);
+	    	
+	    	// Actualizar categoría
+	    	Categoria categoria = service.getCategoria(categoriaId);
+	    	producto.setCategoria(categoria);
+	    	
+	    	// Procesar nueva imagen si existe
+	    	String fileName = procesarImagen(request);
+	    	if (!fileName.isBlank()) {
+	    		producto.setImagen(fileName);
+	    	}
+	    	
+	    	// Guardar cambios
+	    	service.modificarProducto(producto);
+	    	
+	    	mensajeCDI.setMessage("Producto modificado correctamente");
+	    	mensajeCDI.setRole("alert-success");
+	    	request.setAttribute("productosporcategoria", service.getProductosPorCategoria());
+	    	return "productos.jsp";
+	    	
+	    } catch (NumberFormatException e) {
+	    	mensajeCDI.setMessage("Valores numéricos inválidos");
+	    	mensajeCDI.setRole("alert-danger");
+	    	request.setAttribute("categorias", service.getCategorias());
+	    	return "formularioproducto.jsp";
+	    }
+	}
+	
+	private String procesarImagen(HttpServletRequest request) {
+		String uploadPath = getServletContext().getRealPath("") + File.separator + "imagenes";
+		File uploadDir = new File(uploadPath);
+		if (!uploadDir.exists()) {
+			uploadDir.mkdir();
+		}
+		
+		String fileName = "";
+		try {
+			Part part = request.getPart("imagen");
+			if (part != null && part.getSize() > 0) {
+				fileName = part.getSubmittedFileName();
+				if (fileName != null && !fileName.isEmpty()) {
+					part.write(uploadPath + File.separator + fileName);
+				}
+			}
+		} catch (IOException | ServletException e) {
+			e.printStackTrace();
+		}
+		
+		return fileName;
+	}
 }

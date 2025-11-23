@@ -30,11 +30,8 @@
     <!-- BARRA DE NAVEGACION -->
     <nav class="navbar navbar-expand-lg fixed-top "> 
         <div class="container-fluid">
-            <a class="navbar-brand text-light  ms-3" href="#"> 
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-leaf" viewBox="0 0 16 16">
-  					<path d="M1.4 1.7c.216.289.65.84 1.725 1.274 1.093.44 2.884.774 5.834.528l.37-.023c1.823-.06 3.117.598 3.956 1.579C14.16 6.082 14.5 7.41 14.5 8.5c0 .58-.032 1.285-.229 1.997q.198.248.382.54c.756 1.2 1.19 2.563 1.348 3.966a1 1 0 0 1-1.98.198c-.13-.97-.397-1.913-.868-2.77C12.173 13.386 10.565 14 8 14c-1.854 0-3.32-.544-4.45-1.435-1.125-.887-1.89-2.095-2.391-3.383C.16 6.62.16 3.646.509 1.902L.73.806zm-.05 1.39c-.146 1.609-.008 3.809.74 5.728.457 1.17 1.13 2.213 2.079 2.961.942.744 2.185 1.22 3.83 1.221 2.588 0 3.91-.66 4.609-1.445-1.789-2.46-4.121-1.213-6.342-2.68-.74-.488-1.735-1.323-1.844-2.308-.023-.214.237-.274.38-.112 1.4 1.6 3.573 1.757 5.59 2.045 1.227.215 2.21.526 3.033 1.158.058-.39.075-.782.075-1.158 0-.91-.288-1.988-.975-2.792-.626-.732-1.622-1.281-3.167-1.229l-.316.02c-3.05.253-5.01-.08-6.291-.598a5.3 5.3 0 0 1-1.4-.811"/>
-				</svg> 
-                <span>Recyclon </span>
+            <a class="navbar-brand text-light  ms-3" href="#">
+                <i class="bi bi-leaf"></i> <span>Recyclon </span>
             </a>
 
             <button class="navbar-toggler bg-light bg-opacity-75" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -44,16 +41,19 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav ms-auto mb-2 mb-lg-0"> <!--ms-auto para desplazar-->
                   <li class="nav-item">
-                      <a class="nav-link active text-light" href="index.jsp">Inicio</a>
+                      <a class="nav-link active text-light" href="index.jsp">Inicio <i class="bi bi-house-door-fill"></i></a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link active text-light" aria-current="page" href="usuarios">Usuario</a>
+                      <a class="nav-link active text-light fw-bold" aria-current="page" href="controladorrecyclon">Usuario <i class="bi bi-person-fill"></i></a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link active text-light" href="productos">Productos</a>
+                      <a class="nav-link active text-light" href="productos">Catálogo <i class="bi bi-book-fill"></i></a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link active text-light" href="pedidos">Pedidos</a>
+                      <a class="nav-link active text-light" href="pedidos">Pedidos <i class="bi bi-box-seam-fill"></i></i></a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link active text-light" href="cesta">Cesta <i class="bi bi-bag-fill"></i></a>
                   </li>
               </ul>  
               
@@ -65,32 +65,53 @@
      
     <div class="container-fluid  justify-content-center align-items-center mt-5">
        <div class="col-8 offset-2 p-5">
-                <div class="accordion mt-5" id="accordionUser">
+       			<h1 class="text-center">Hola, ${usuario.nombre} ${usuario.apellidos}</h1>
+                <div class="accordion mt-4" id="accordionUser">
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="cabeceraAcordeon">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            <button class="accordion-button fw-bold" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#collapse1" aria-expanded="true" aria-controls="collapseOne">
-                                Datos Usuario ${usuario.idUsuario}
+                                Tus datos
                             </button>
                         </h2>
                         <div id="collapse1" class="accordion-collapse collapse show" aria-labelledby="heading1"
                             data-bs-parent="#accordionUser">
                             <div class="accordion-body">
-                                <ul  class="list-unstyled">
-                                    <li>Nombre: ${usuario.nombre}</li>
-                                    <li>Apellidos: ${usuario.apellidos}</li>
-                                    <li>Telefono: ${usuario.telefono}</li>
-                                    <li>Fecha de Nacimiento: ${usuario.fechaNacimiento}</li>
-                                    <li>Documento identidad: ${usuario.documentoIdentidad}</li>
-                                    <li>Correo electronico: ${usuario.email}</li>
-                                    <li>Dirección de envio: ${usuario.direccionEnvio}</li>
-                                    <li>Dirección de Facturación: ${usuario.direccionFacturacion}</li>
-                                 </ul>
+                            	<form class="row">
+				                    <div class="col-3 mt-2">
+				                        <label for="Nombre" class="form-label">Nombre</label>
+				                        <input type="text" class="form-control bg-white" id="Nombre" value="${usuario.nombre}" disabled>
+				                    </div>
+				                    <div class="col-4 mt-2">
+				                        <label for="Apellido" class="form-label">Apellidos</label>
+				                        <input type="text" class="form-control  bg-white" id="Apellido" value="${usuario.apellidos}" disabled>
+				                    </div>
+				                    <div class="col-3 mt-2">
+				                        <label for="fnacimiento" class="form-label">Documento identidad</label>
+				                        <input type="text" class="form-control  bg-white" id="fnacimiento" value="${usuario.documentoIdentidad}" disabled>
+				                    </div>
+				                    <div class="col-2 mt-2">
+				                        <label for="dni" class="form-label">Fecha Nacimiento</label>
+				                        <input type="text" class="form-control  bg-white" id="dni" value="${usuario.fechaNacimiento}" disabled>
+				                    </div>
+				                    <div class="col-4 mt-4">
+				                        <label for="email" class="form-label">E-mail</label>
+				                        <input type="text" class="form-control  bg-white" id="email" value="${usuario.email}" disabled>
+				                    </div>
+				                    <div class="col-4 mt-4">
+				                        <label for="envio" class="form-label">Dirección de Envio</label>
+				                        <input type="text" class="form-control  bg-white" id="envio" value="${usuario.direccionEnvio}" disabled>
+				                    </div>
+				                    <div class="col-4 mt-4">
+				                        <label for="facturacion" class="form-label">Dirección de Facturación</label>
+				                        <input type="text" class="form-control  bg-white" id="facturacion" value="${usuario.direccionFacturacion}" disabled>
+				                    </div>
+				                    <div class="col-12 mt-4">
+				                        <a href="pedidos?accion=verPedidosUsuario" class="btn btn-outline-success rounded" ROLE="button">Ver Pedidos</a>
+				                    </div>
+				                </form>
             				</div>
                         </div>
-                    </div>
-                    <div class="container-fluid  justify-content-center align-items-center mt-5">
-                    	<a class="btn btn-outline-success rounded" href="pedidos?accion=verPedidosUsuario">Ver Pedidos</a>
                     </div>
                 </div>
             </div>

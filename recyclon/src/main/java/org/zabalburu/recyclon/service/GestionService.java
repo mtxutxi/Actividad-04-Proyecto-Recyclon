@@ -47,6 +47,14 @@ public class GestionService {
 		categoriaDAO.eliminarCategoria(id);
 	}
 	
+	public List<Categoria> getCategorias() {
+		return categoriaDAO.getCategorias();
+	}
+	
+	public Categoria getCategoria(Integer id) {
+		return categoriaDAO.getCategoria(id);
+	}
+	
 	//LINEA_PEDIDO//
 	public LineaPedido nuevaLineaPedido(LineaPedido nueva) {
 		return lineaPedidoDAO.nuevaLineaPedido(nueva);

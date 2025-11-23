@@ -1,10 +1,15 @@
 package org.zabalburu.recyclon.dao.categoria;
 
+import java.util.List;
+
 import org.zabalburu.recyclon.modelo.Categoria;
+import org.zabalburu.recyclon.modelo.Pedido;
+import org.zabalburu.recyclon.modelo.Producto;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 
 @ApplicationScoped //Para que haya una única instancia del DAOImpl
@@ -43,5 +48,22 @@ public class CategoriaDAOImpl implements CategoriaDAO {
 		if (eliminar != null) { //Comprueba que existe el id
 			em.remove(eliminar); //EntityManager elimina ese registro
 		}
+	}
+	
+	@Override
+	public List<Categoria> getCategorias() {
+		//No es SQL es JPQL, trabaja con entidades @Entity
+		//Al escribir la consulta hay que escribir el nombre de la clase, no el de la tabla
+		TypedQuery<Categoria> q = em.createQuery( //Con typedQuery se le indica al compilador el tipo de lista que va a devolver (Categoria)
+		"""
+		SELECT c
+			FROM Categoria c
+		""", Categoria.class);
+		return q.getResultList();
+	}
+	
+	@Override
+	public Categoria getCategoria(Integer id) {
+		return em.find(Categoria.class, id);
 	}
 }
