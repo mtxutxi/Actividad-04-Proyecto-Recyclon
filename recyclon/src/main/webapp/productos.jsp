@@ -9,7 +9,7 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <script src="https://kit.fontawesome.com/f21170cf61.js" crossorigin="anonymous"></script>
-    <title>Bienvenida</title>
+    <title>Productos</title>
     <style>
         :root {
 			--color-fondo: #EDE8DC;
@@ -43,7 +43,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav ms-auto mb-2 mb-lg-0"> <!--ms-auto para desplazar-->
                   <li class="nav-item">
-                      <a class="nav-link active text-light"  href="index.jsp">Inicio</a>
+                      <a class="nav-link text-light"  href="index.jsp">Inicio</a>
                   </li>
                   <li class="nav-item">
                       <a class="nav-link active text-light" href="usuarios">Usuario</a>
@@ -126,7 +126,7 @@
                     </span>
 
                     <div class="d-grid gap-2 mt-2">
-                        <a href="productos?accion=getproducto&id=${producto.id}" class="btn btn-outline-success btn-sm"> <!-- Aqui va al producto del id -->
+                        <a href="productos?accion=getproducto&id=${producto.idProducto}" class="btn btn-outline-success btn-sm"> <!-- Aqui va al producto del id -->
                             <i class="bi bi-eye"></i> Ver Detalles
                         </a>
                     </div>

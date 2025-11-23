@@ -9,7 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <script src="https://kit.fontawesome.com/f21170cf61.js" crossorigin="anonymous"></script>
-    <title>Bienvenida</title>
+    <title>Inicio sesión</title>
     <style>
         :root {
 			--color-fondo: #EDE8DC;
@@ -27,7 +27,7 @@
 </head>
 <body>
     <!-- BARRA DE NAVEGACION -->
-    <nav class="navbar navbar-expand-lg fixed-top "> 
+    <nav class="navbar navbar-expand-lg fixed-top"> 
         <div class="container-fluid">
             <a class="navbar-brand text-light  ms-3" href="#"> 
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-leaf" viewBox="0 0 16 16">
@@ -42,16 +42,16 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav ms-auto mb-2 mb-lg-0"> <!--ms-auto para desplazar-->
                   <li class="nav-item">
-                      <a class="nav-link active text-light" aria-current="page" href="index.jsp">Inicio</a>
+                      <a class="nav-link active text-light fw-bold" aria-current="page" href="index.jsp">Inicio sesión</a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link active text-light" href="usuarios">Usuario</a>
+                      <a class="nav-link text-light" href="usuarios">Usuario</a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link active text-light" href="productos">Productos</a>
+                      <a class="nav-link text-light" href="productos">Productos</a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link active text-light" href="pedidos">Pedidos</a>
+                      <a class="nav-link text-light" href="pedidos">Pedidos</a>
                   </li>
               </ul>  
               
@@ -59,10 +59,9 @@
         </div>
     </nav>
     
-<!--     AQUI PUEDES LOGUEARTE O ACCEDER A LAS PESTAÑAS PARA VER PRODUCTOS SIN LOGUEARTE -->
-    <div class="container mt-5">
+    <div class="container mt-5 pt-5">
 		<div class="row text-center">
-			<h1>Identifíquese</h1>
+			<h1>Inicio sesión</h1>
 		</div>
 		<c:if test="${! empty mensajeCDI.message }">
 			<div class="row">
@@ -77,18 +76,17 @@
 			<div class="col-6">
 				<form action="usuarios" method="post">
 					<div class="mb-3">
-						<label for="exampleInputEmail1" class="form-label">Email
-							address</label> <input type="email" class="form-control"
+						<label for="exampleInputEmail1" class="form-label fw-bold">E-mail</label> <input type="text" class="form-control"
 							id="exampleInputEmail1" aria-describedby="emailHelp" name="email"
 							value="${param.email }">
 					</div>
 					<div class="mb-3">
-						<label for="exampleInputPassword1" class="form-label">Password</label>
+						<label for="exampleInputPassword1" class="form-label fw-bold">Contraseña</label>
 						<input type="password" class="form-control"
 							id="exampleInputPassword1" name="password">
 					</div>
-					<button type="submit" class="btn btn-primary" name="accion" value="login">Entrar</button>
-					<button type="submit" class="btn btn-info" name="accion" value="registro">Registrarse</button>
+					<button type="submit" class="btn btn-success" name="accion" value="login">Entrar</button>
+					<button type="submit" class="btn btn-outline-success" name="accion" value="registro">Registrarse</button>
 				</form>
 			</div>
 		</div>

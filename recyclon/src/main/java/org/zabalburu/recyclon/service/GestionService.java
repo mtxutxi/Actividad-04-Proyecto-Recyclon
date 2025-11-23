@@ -65,12 +65,15 @@ public class GestionService {
 	}
 	
 	//PEDIDO//
-	public Pedido nuevoPedido(Pedido nuevo) {
+	public Pedido nuevoPedido(Pedido nuevo) { //ponemos un estado inicial si no tiene
+		if (nuevo.getEstado() == null || nuevo.getEstado().isBlank()) {
+			nuevo.setEstado("Pendiente");
+		}
 		return pedidoDAO.nuevoPedido(nuevo);
 	}
 	
 	public Pedido modificarPedido(Pedido modificado) {
-		return modificarPedido(modificado);
+		return pedidoDAO.modificarPedido(modificado);
 	}
 	
 	public Pedido getPedido(Integer id) {
@@ -79,6 +82,14 @@ public class GestionService {
 	
 	public List<Pedido> getPedidos() {
 		return pedidoDAO.getPedidos();
+	}
+	
+	public void estadoPedido(Integer idPedido, String nuevoEstado) {
+	    Pedido pedido = pedidoDAO.getPedido(idPedido);
+	    if (pedido != null) {
+	        pedido.setEstado(nuevoEstado);
+	        pedidoDAO.modificarPedido(pedido);
+	    }
 	}
 	
 	//PRODUCTO//

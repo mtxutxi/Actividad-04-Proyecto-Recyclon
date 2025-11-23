@@ -76,7 +76,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="productos">Productos</a></li>
-                <li class="breadcrumb-item"><a href="productos?accion=getcategoriaproducto&id=${producto.categoria.id}">${producto.categoria.nombre}</a></li>
+                <li class="breadcrumb-item"><a href="productos?accion=getcategoriaproducto&id=${producto.categoria.idCategoria}">${producto.categoria.tipo}</a></li>
                 <li class="breadcrumb-item active">${producto.nombre}</li>
             </ol>
         </nav>
@@ -141,10 +141,10 @@
                             </c:if>
 
                             <c:if test="${sessionScope.usuario != null && sessionScope.usuario.isAdmin}">
-                                <a href="productos?accion=modificarproducto&id=${producto.id}" class="btn btn-warning">
+                                <a href="productos?accion=modificarproducto&id=${producto.idProducto}" class="btn btn-warning">
                                     <i class="bi bi-pencil"></i> Modificar Producto
                                 </a>
-                                <a href="productos?accion=eliminarproducto&id=${producto.id}" 
+                                <a href="productos?accion=eliminarproducto&id=${producto.idProducto}" 
                                    class="btn btn-danger"
                                    onclick="return confirm('¿Eliminar este producto?')">
                                     <i class="bi bi-trash"></i> Eliminar Producto

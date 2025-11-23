@@ -6,6 +6,7 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -38,12 +39,12 @@ public class Pedido implements Serializable {
 
 	private Date fecha;
 	
-	private String estado;
+	private String estado ="Pendiente";
 	
 	@ManyToOne //N a 1
 	@JoinColumn(name = "id_usuario") //Apuntamos al id de Cliente (ForeignKey)
 	private Usuario usuario;
-	 
-	@OneToMany(mappedBy = "pedido") //Relacion 1 a N, mappedBy -> apuntamos a la relacion de LineaPedido
+	 //añadido el fetchType para traer todo de una vez si no hacemos es lazy y no lo trae
+	@OneToMany(mappedBy = "pedido",fetch = FetchType.EAGER) //Relacion 1 a N, mappedBy > apuntamos a la relacion de LineaPedido
 	private List<LineaPedido> lineasPedido;
 }
