@@ -47,7 +47,7 @@
                       <a class="nav-link active text-light" href="index.jsp">Inicio</a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link active text-light" aria-current="page" href="usuarios">Usuario</a>
+                      <a class="nav-link active text-light fw-bold" aria-current="page" href="controladorrecyclon">Usuario</a>
                   </li>
                   <li class="nav-item">
                       <a class="nav-link active text-light" href="productos">Productos</a>
@@ -70,7 +70,7 @@
                         <h2 class="accordion-header" id="cabeceraAcordeon">
                             <button class="accordion-button" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#collapse1" aria-expanded="true" aria-controls="collapseOne">
-                                Datos Usuario ${usuario.id}
+                                Datos Usuario ${usuario.idUsuario}
                             </button>
                         </h2>
                         <div id="collapse1" class="accordion-collapse collapse show" aria-labelledby="heading1"

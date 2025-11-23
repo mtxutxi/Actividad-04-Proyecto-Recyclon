@@ -46,13 +46,13 @@
                       <a class="nav-link text-light" href="index.jsp">Inicio</a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link text-light" href="usuarios">Usuario</a>
+                      <a class="nav-link text-light" href="controladorrecyclon">Usuario</a>
                   </li>
                   <li class="nav-item">
                       <a class="nav-link text-light" href="productos">Productos</a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link active text-light" href="pedidos">Pedidos</a>
+                      <a class="nav-link active text-light fw-bold" aria-current="page" href="pedidos">Pedidos</a>
                   </li>
               </ul>
           </div>
@@ -84,7 +84,7 @@
                 <c:forEach var="pedido" items="${pedidos}">
                     <tr>
                         <td>#${pedido.idPedido}</td>
-                        <td><fmt:formatDate value="${pedido.fecha}" pattern="dd/MM/yyyy HH:mm"/></td>
+                        <td><fmt:formatDate value="${pedido.fecha}" pattern="dd/MM/yyyy"/></td>
                         <td>
                             <c:choose>
                                 <c:when test="${pedido.estado == 'Pendiente'}">
