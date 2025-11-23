@@ -95,7 +95,7 @@
             <tbody>
                 <c:forEach var="pedido" items="${pedidos}">
                     <tr>
-                        <td>#${pedido.idPedido}</td>
+                        <th>#${pedido.idPedido}</th>
                         <td><fmt:formatDate value="${pedido.fecha}" pattern="dd/MM/yyyy"/></td>
                         <c:if test="${sessionScope.usuario.isAdmin}">
                     		<td>${pedido.usuario.nombre} ${pedido.usuario.apellidos}</td>
@@ -135,13 +135,27 @@
         	</c:choose>
                     <h6>Productos del Pedido: #${pedido.idPedido}</h6>
                     <c:if test="${not empty pedido.lineasPedido}">
-                        <ul class="list-group text-center">
+                    	<table class="table">
+							<thead>
+								<tr>
+									<th scope="col">ID</th>
+									<th scope="col">Producto</th>
+									<th scope="col">Precio</th>
+									<th scope="col">Cantidad</th>
+								</tr>
+							</thead>
+							<tbody>
                             <c:forEach var="linea" items="${pedido.lineasPedido}">
-                                <li class="list-group-item">${linea.producto.nombre} - Cantidad: ${linea.cantidad} - Precio: <fmt:formatNumber value="${linea.producto.precio}" type="currency" currencySymbol="€"/></li>
+                                <tr>
+									<th scope="row">${linea.producto.idProducto}</th>
+									<td>${linea.producto.nombre}</td>
+									<td><fmt:formatNumber value="${linea.producto.precio}" type="currency" currencySymbol="€"/></td>
+									<td>${linea.cantidad}</td>
+								</tr>
                             </c:forEach>
-                        </ul>
+                          </tbody>
+                        </table>
                     </c:if>
-                    <hr>
                     <c:if test="${empty pedido.lineasPedido}">
                         <p>Sin productos</p>
                     </c:if>
@@ -173,7 +187,6 @@
                                </div>
                                </form>
                                </c:if>
-                        </td>
                     </tr>
                 </c:forEach>
             </tbody>
