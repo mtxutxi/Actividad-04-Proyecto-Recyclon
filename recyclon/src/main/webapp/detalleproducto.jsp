@@ -82,7 +82,7 @@
             <div class="col-md-6">
                 <div class="card shadow">
                     <div class="card-body">
-                        <span class="badge bg-success mb-2">${producto.categoria.nombre}</span>
+                        <span class="badge bg-success mb-2">${producto.categoria.tipo}</span><!-- nombre o tipo?¿ -->
                         <h2 class="card-title">${producto.nombre}</h2>
                         
                         <h3 class="text-success my-4">
