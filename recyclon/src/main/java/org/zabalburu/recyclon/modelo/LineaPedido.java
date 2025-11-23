@@ -26,20 +26,23 @@ public class LineaPedido implements Serializable {
 	
 	
 	@Id //Para marcar "id_linea_pedido" como PrimaryKey
-	@GeneratedValue(strategy = GenerationType.IDENTITY) //Para indicar que el id lo genera la BBDD
+	@GeneratedValue(strategy = GenerationType.IDENTITY) // el id lo genera la BBDD
 	@Column(
-			name = "id_linea_pedido" //Nombre de la columna en la BBDD
+			name = "id_linea_pedido" //columna en la BBDD
 	)
 	@EqualsAndHashCode.Include
 	private Integer idLineaPedido;
 	
 	@ManyToOne
-	@JoinColumn(name = "id_pedido") //Apuntamos al id de Pedido (ForeignKey)
+	@JoinColumn(name = "id_pedido") //id de Pedido (FK)
 	private Pedido pedido;
 	
 	@ManyToOne
-	@JoinColumn(name = "id_producto") //Apuntamos al id de Producto (ForeignKey)
+	@JoinColumn(name = "id_producto") //id de Producto (FK)
 	private Producto producto;
 	
 	private Integer cantidad;
+	
+	private Double precio; // precio total linea pedido
+
 }

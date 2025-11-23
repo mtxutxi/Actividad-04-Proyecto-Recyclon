@@ -2,9 +2,13 @@ package org.zabalburu.recyclon.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.zabalburu.recyclon.cdi.MensajeCDI;
+import org.zabalburu.recyclon.modelo.Cesta;
 import org.zabalburu.recyclon.modelo.Producto;
 import org.zabalburu.recyclon.modelo.Usuario;
 import org.zabalburu.recyclon.service.GestionService;
@@ -30,6 +34,9 @@ public class ProductosController extends HttpServlet {
 	
 	@Inject
 	private MensajeCDI mensajeCDI;
+	
+	@Inject
+	private Cesta cesta;
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -41,40 +48,154 @@ public class ProductosController extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-				HttpSession sesion = request.getSession();
-				String pagina = null; // declaramos e inicializamos la variable que almaceanara la ruta del jsp al que se redirigira
-				String accion = request.getParameter("accion"); //obtiene el parametro accion de la URL y lo vuelca en la variable accion
-				/*Los datos que se cargan automaticamente en la pagina y no hacen operaciones van en el if, si hacen algo o necesitan 
-				  interaccion del ususario van al switch por que tenemos sus metodos fuera*/
-				if(accion == null) {//esto seria que no hacen operaciones, solo muestran los datos sin más
-					request.setAttribute("productosporcategoria", service.getProductosPorCategoria());// obtiene los productosPorCat usando el metodo del service y los guarda en pedidos para que esten disponibles en el jsp
-					pagina = "productos.jsp";
-				}else {/*Ahora vamos a meter las acciones que requieren intervención del usuario, que no son de mostrar y listo.*/
-					switch (accion.toLowerCase()) {
-						case "nuevoproducto": 
-							pagina = nuevoProducto(request,response);//Necesita permisos de Admin
-							break;
-						case "modificarproducto":
-							pagina = modificarProducto(request,response);//Necesita permisos de Admin
-							break;
-						case "eliminarproducto":
-							pagina = eliminarProducto(request,response);//Necesita permisos de Admin
-							break;
-						case "getproducto":
-							pagina = getProducto(request,response);
-							break;
-						case "getcategoriaproducto":
-							pagina = getCategoriaProducto(request,response);
-							break;
-						case "buscarproducto":
-							pagina = buscarProducto(request,response);
-							break;
-						
-					}
-				}
-				request.getRequestDispatcher(pagina).forward(request, response);
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession sesion = request.getSession();
+        String pagina = null;
+        String accion = request.getParameter("accion");
+        
+        if(accion == null) {
+            request.setAttribute("productosporcategoria", service.getProductosPorCategoria());
+            pagina = "productos.jsp";
+        } else {
+            System.out.println("ACCION: " + accion);
+            
+            switch (accion.toLowerCase()) {
+                case "nuevoproducto": 
+                    pagina = nuevoProducto(request,response);
+                    break;
+                case "modificarproducto":
+                    pagina = modificarProducto(request,response);
+                    break;
+                case "eliminarproducto":
+                    pagina = eliminarProducto(request,response);
+                    break;
+                case "getproducto":
+                    pagina = getProducto(request,response);
+                    break;
+                case "getcategoriaproducto":
+                    pagina = getCategoriaProducto(request,response);
+                    break;
+                case "buscarproducto":
+                    pagina = buscarProducto(request,response);
+                    break;
+                case "anadiralcarrito":
+                    pagina = añadirAlCarrito(request, response);
+                    break;
+                case "vercarrito":
+                    pagina = verCarrito(request, response);
+                    break;
+                case "eliminardelcarrito":
+                    pagina = eliminarDelCarrito(request, response);
+                    break;
+            }
+        }
+        
+        System.out.println("PAGINA FINAL: " + pagina); 
+        request.getRequestDispatcher(pagina).forward(request, response);
+    }
+
+	private String eliminarDelCarrito(HttpServletRequest request, HttpServletResponse response) {
+	    try {
+	        Integer idProducto = Integer.parseInt(request.getParameter("id"));
+	        cesta.eliminarProducto(idProducto);
+	        
+	        mensajeCDI.setMessage("Producto eliminado del carrito");
+	        mensajeCDI.setRole("alert-success");
+	        
+	    } catch (NumberFormatException e) {
+	        mensajeCDI.setMessage("Error al eliminar producto");
+	        mensajeCDI.setRole("alert-danger");
+	    }
+	    
+	    return "cesta.jsp";
+	}
+	
+	private String verCarrito(HttpServletRequest request, HttpServletResponse response) {
+	    // crea lista para enviar al JSP con producto + cantidad
+	    List<Map<String, Object>> productosCarrito = new ArrayList<>();  
+	    
+	    // por cada producto en la cesta, obtener los datos completos
+	    for (Map.Entry<Integer, Integer> entry : cesta.getProductos().entrySet()) {
+	        Integer idProducto = entry.getKey();
+	        Integer cantidad = entry.getValue();
+	        
+	        Producto producto = service.getProducto(idProducto);
+	        
+	        if (producto != null) {
+	            Map<String, Object> item = new HashMap<>();
+	            item.put("producto", producto);
+	            item.put("cantidad", cantidad);
+	            productosCarrito.add(item);
+	        }
+	    }
+	    
+	    request.setAttribute("productosCarrito", productosCarrito);
+	    return "cesta.jsp";
+	}
+	
+	private String añadirAlCarrito(HttpServletRequest request, HttpServletResponse response) {
+	    System.out.println("AÑADIR CARRITO");
+	    
+	    try {
+
+	        String idParam = request.getParameter("id");
+	        String cantParam = request.getParameter("cantidad");
+	       
+	        
+	        Integer idProducto = Integer.parseInt(idParam);
+	        Integer cantidad = Integer.parseInt(cantParam);
+	        
+
+	        Producto producto = service.getProducto(idProducto);
+	        
+	        if (producto == null) {
+	            mensajeCDI.setMessage("Producto no encontrado");
+	            mensajeCDI.setRole("alert-danger");
+	            request.setAttribute("productosporcategoria", service.getProductosPorCategoria());
+	            return "productos.jsp";
+	        }
+	        
+	        
+	        if (producto.getStock() < cantidad) {
+	            System.out.println("   - Stock insuficiente");
+	            mensajeCDI.setMessage("No hay suficiente stock disponible");
+	            mensajeCDI.setRole("alert-danger");
+	            request.setAttribute("producto", producto);
+	            return "detalleproducto.jsp";
+	        }
+	        
+	        System.out.println("Verificando cesta...");
+	        if (cesta == null) {
+	            System.out.println("ERROR-Cesta NULL");
+	            mensajeCDI.setMessage("Error: Carrito no disponible");
+	            mensajeCDI.setRole("alert-danger");
+	            request.setAttribute("productosporcategoria", service.getProductosPorCategoria());
+	            return "productos.jsp";
+	        }
+	        
+
+	        cesta.añadirProducto(idProducto, cantidad);
+	        
+	        System.out.println("añadido exitosamente");
+	        
+	        mensajeCDI.setMessage("Producto añadido al carrito");
+	        mensajeCDI.setRole("alert-success");
+	        request.setAttribute("productosporcategoria", service.getProductosPorCategoria());
+	        
+	        System.out.println("FIN AÑADIR CARRITO");
+	        return "productos.jsp";
+	        
+	    } catch (Exception e) {
+	        System.out.println("ERR AÑADIR CARRITO");
+	        System.out.println("Tipo de error: " + e.getClass().getName());
+	        System.out.println("Mensaje: " + e.getMessage());
+	        e.printStackTrace();
+	        
+	        mensajeCDI.setMessage("Error: " + e.getMessage());
+	        mensajeCDI.setRole("alert-danger");
+	        request.setAttribute("productosporcategoria", service.getProductosPorCategoria());
+	        return "productos.jsp";
+	    }
 	}
 
 	private String buscarProducto(HttpServletRequest request, HttpServletResponse response) {
