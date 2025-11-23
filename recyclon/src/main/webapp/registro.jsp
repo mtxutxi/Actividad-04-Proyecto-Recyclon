@@ -60,9 +60,9 @@
           </div>
         </div>
     </nav>
-	<div class="container mt-5 pt-5">
+	<div class="container mt-5 py-5">
 		<div class="row text-center">
-			<h1>Introduzca sus datos</h1>
+			<h1>Registro</h1>
 		</div>
 		<c:if test="${! empty mensajeCDI.message }">
 			<div class="row">
@@ -77,53 +77,53 @@
 			<div class="col-6">
 				<form action="usuarios" method="post">
 					<div class="mb-3">
-						<label for="nombre" class="form-label">Nombre</label> 
+						<label for="nombre" class="form-label fw-bold">Nombre</label> 
 						<input type="text" class="form-control"
 							id="nombre" aria-describedby="emailHelp" name="nombre"
 							value="${param.nombre }">
 					</div>
 					<div class="mb-3">
-						<label for="apellidos" class="form-label">Apellidos</label> 
+						<label for="apellidos" class="form-label fw-bold">Apellidos</label> 
 						<input type="text" class="form-control"
 							id="apellidos" aria-describedby="emailHelp" name="apellidos"
 							value="${param.apellidos}">
 					</div>
 					<div class="mb-3">
-						<label for="apellidos" class="form-label">Teléfono</label> 
+						<label for="apellidos" class="form-label fw-bold">Teléfono</label> 
 						<input type="text" class="form-control"
 							id="tlfno" aria-describedby="emailHelp" name="tlfno"
 							value="${param.tlfno}">
 					</div>
 					<div class="mb-3">
-						<label for="apellidos" class="form-label">Fecha de nacimiento</label> 
+						<label for="apellidos" class="form-label fw-bold">Fecha de nacimiento</label> 
 						<input type="text" class="form-control"
 							id="fNacimiento" aria-describedby="emailHelp" name="fNacimiento"
 							value="${param.fNacimiento}">
 					</div>
 					<div class="mb-3">
-						<label for="apellidos" class="form-label">DNI</label> 
+						<label for="apellidos" class="form-label fw-bold">DNI</label> 
 						<input type="text" class="form-control"
 							id="dni" aria-describedby="emailHelp" name="dni"
 							value="${param.dni}">
 					</div>
 					<div class="mb-3">
-						<label for="exampleInputEmail1" class="form-label">Email</label> 
+						<label for="exampleInputEmail1" class="form-label fw-bold">E-mail</label> 
 						<input type="email" class="form-control"
 							id="exampleInputEmail1" aria-describedby="emailHelp" name="email"
 							value="${param.email }">
 					</div>
 					<div class="mb-3">
-						<label for="exampleInputPassword1" class="form-label">Contraseña</label>
+						<label for="exampleInputPassword1" class="form-label fw-bold">Contraseña</label>
 						<input type="password" class="form-control"
 							id="exampleInputPassword1" name="contrasena1">
 					</div>
 					<div class="mb-3">
-						<label for="exampleInputPassword2" class="form-label">Repita su contraseña</label>
+						<label for="exampleInputPassword2" class="form-label fw-bold">Repita su contraseña</label>
 						<input type="password" class="form-control"
 							id="exampleInputPassword2" name="contrasena2">
 					</div>
-					<button type="submit" class="btn btn-primary" name="accion" value="guardar">Guardar</button>
-					<button type="submit" class="btn btn-info" name="accion" value="cancelUser">Volver</button>
+					<button type="submit" class="btn btn-success" name="accion" value="guardar">Guardar</button>
+					<button type="submit" class="btn btn-outline-success" name="accion" value="cancelUser">Volver</button>
 				</form>
 			</div>
 		</div>

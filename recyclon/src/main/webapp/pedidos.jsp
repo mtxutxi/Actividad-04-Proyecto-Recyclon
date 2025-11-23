@@ -60,7 +60,16 @@
     </nav>
     
 <div class="container mt-4">
-    <h2 class="mb-4 text-center">Mis Pedidos</h2>
+    <h2 class="mb-4 text-center">
+    	<c:choose>
+    		<c:when test="${sessionScope.usuario.isAdmin}">
+    			Pedidos
+    		</c:when>
+    		<c:otherwise>
+    			Mis Pedidos
+    		</c:otherwise>
+    	</c:choose>
+    </h2>
 
     <!-- si NO hay pedidos -->
     <c:if test="${empty pedidos}">
@@ -76,6 +85,9 @@
                 <tr>
                     <th>ID</th>
                     <th>Fecha</th>
+                    <c:if test="${sessionScope.usuario.isAdmin}">
+                    	<th>Usuario</th>
+                    </c:if>
                     <th>Estado</th>
                     <th>Detalles</th>
                 </tr>
@@ -85,19 +97,22 @@
                     <tr>
                         <td>#${pedido.idPedido}</td>
                         <td><fmt:formatDate value="${pedido.fecha}" pattern="dd/MM/yyyy"/></td>
+                        <c:if test="${sessionScope.usuario.isAdmin}">
+                    		<td>${pedido.usuario.nombre} ${pedido.usuario.apellidos}</td>
+                    	</c:if>
                         <td>
                             <c:choose>
                                 <c:when test="${pedido.estado == 'Pendiente'}">
-                                    <p>${pedido.estado}<p>
+                                    <p><span class="badge bg-danger">${pedido.estado}</span><p>
                                 </c:when>
                                 <c:when test="${pedido.estado == 'Enviado'}">
-                                    <p>${pedido.estado}</p>
+                                    <p><span class="badge bg-primary">${pedido.estado}</span></p>
                                 </c:when>
                                 <c:when test="${pedido.estado == 'Entregado'}">
-                                    <p>${pedido.estado}<p>
+                                    <p><span class="badge bg-success">${pedido.estado}</span><p>
                                 </c:when>
                                 <c:otherwise>
-                                    <span>${pedido.estado}</span>
+                                    <p><span class="badge bg-secondary">${pedido.estado}</span></p>
                                 </c:otherwise>
                             </c:choose>
                         </td>                        
@@ -110,13 +125,20 @@
                     </tr>
         <!-- collapse -->
         <tr class="collapse" id="detalle${pedido.idPedido}">
-            <td colspan="4">
+        	<c:choose>
+        		<c:when test="${sessionScope.usuario.isAdmin}">
+        			<td colspan="5">
+        		</c:when>
+        		<c:otherwise>
+        			<td colspan="4">
+        		</c:otherwise>
+        	</c:choose>
                 <div class="card card-body">
                     <h6>Productos del Pedido: #${pedido.idPedido}</h6>
                     <c:if test="${not empty pedido.lineasPedido}">
                         <ul>
                             <c:forEach var="linea" items="${pedido.lineasPedido}">
-                                <li>${linea.producto.nombre} - Cantidad: ${linea.cantidad} - Precio: ${producto.precio}€/></li>
+                                <li>${linea.producto.nombre} - Cantidad: ${linea.cantidad} - Precio: ${linea.producto.precio}€/></li>
                             </c:forEach>
                         </ul>
                     </c:if>

@@ -6,7 +6,9 @@ import org.zabalburu.recyclon.modelo.Pedido;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 
@@ -45,7 +47,20 @@ public class PedidoDAOImpl implements PedidoDAO {
 	
 	@Override
 	public Pedido getPedido(Integer id) {
-		return em.find(Pedido.class, id);
+//		return em.find(Pedido.class, id);
+		Query q = em.createQuery(
+				"""
+				Select p From Pedido p
+				Join Fetch p.lineasPedido
+				Where p.id=:id		
+				"""
+			);
+			q.setParameter("id", id); //Aqui se asigna el id de la categoria que se usa en la consulta
+			Pedido p = null;
+			try {
+				p = (Pedido) q.getSingleResult();
+			} catch (NoResultException ex) {}
+			return p;
 	}
 
 	@Override
@@ -57,7 +72,7 @@ public class PedidoDAOImpl implements PedidoDAO {
 		"""
 		SELECT p
 			FROM Pedido p
-			ORDER BY p.usuario, p.estado
+			ORDER BY p.idPedido
 		""", Pedido.class);
 		return q.getResultList();
 	}
