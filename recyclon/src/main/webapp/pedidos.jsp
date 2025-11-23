@@ -52,7 +52,7 @@
                       <a class="nav-link active text-light fw-bold" aria-current="page" href="pedidos">Pedidos <i class="bi bi-box-seam-fill"></i></a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link active text-light" href="cesta">Cesta <i class="bi bi-bag-fill"></i></a>
+                      <a class="nav-link active text-light" href="productos?accion=vercarrito">Cesta <i class="bi bi-bag-fill"></i></a>
                   </li>
               </ul>  
               

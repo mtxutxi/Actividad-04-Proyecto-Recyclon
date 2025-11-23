@@ -49,7 +49,7 @@ public class ProductoDAOImpl implements ProductoDAO {
 	}
 
 	@Override
-	public List<Producto> getProductosPorCategoria() { //Devuelve los productos ordenados por categoria y dentro de cada categoria por precio
+	public List<Producto> getProductosPorCategoria() { //Devuelve los productos ordenados por categoria y dentro de cada categoria por precio, YA NO :)
 		//No es SQL es JPQL, trabaja con entidades @Entity
 				//Al escribir la consulta hay que escribir el nombre de la clase, no el de la tabla
 //				Query q = em.createQuery(
@@ -57,7 +57,7 @@ public class ProductoDAOImpl implements ProductoDAO {
 				"""
 				SELECT p
 					FROM Producto p
-					ORDER BY p.categoria.tipo, p.precio
+					ORDER BY p.categoria
 				""", Producto.class);
 				return q.getResultList();
 	}
@@ -91,6 +91,44 @@ public class ProductoDAOImpl implements ProductoDAO {
 					ORDER BY p.precio
 				""", Producto.class);
 				q.setParameter("busqueda", "%%%s%%".formatted(busqueda.toLowerCase())); // %busqueda%
+				return q.getResultList();
+	}
+	
+	@Override
+	public List<Producto> getProductosStockBajo(Integer stock) { //Devuelve los productos ordenados por categoria y dentro de cada categoria por precio
+		//No es SQL es JPQL, trabaja con entidades @Entity
+				//Al escribir la consulta hay que escribir el nombre de la clase, no el de la tabla
+//				Query q = em.createQuery(
+				TypedQuery<Producto> q = em.createQuery( //Con typedQuery se le indica al compilador el tipo de lista que va a devolver (Producto)
+				"""
+				SELECT p
+					FROM Producto p
+					WHERE stock <= :stock
+					ORDER BY p.stock
+				""", Producto.class);
+				q.setParameter("stock", stock);
+				return q.getResultList();
+	}
+
+	@Override
+	public List<Producto> getPrecioAsc() {
+		TypedQuery<Producto> q = em.createQuery( //Con typedQuery se le indica al compilador el tipo de lista que va a devolver (Producto)
+				"""
+				SELECT p
+					FROM Producto p
+					ORDER BY p.precio
+				""", Producto.class);
+				return q.getResultList();
+	}
+
+	@Override
+	public List<Producto> getPrecioDesc() {
+		TypedQuery<Producto> q = em.createQuery( //Con typedQuery se le indica al compilador el tipo de lista que va a devolver (Producto)
+				"""
+				SELECT p
+					FROM Producto p
+					ORDER BY p.precio desc
+				""", Producto.class);
 				return q.getResultList();
 	}
 }

@@ -52,7 +52,7 @@
                       <a class="nav-link text-light" href="pedidos">Pedidos <i class="bi bi-box-seam-fill"></i></a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link active text-light" href="cesta">Cesta <i class="bi bi-bag-fill"></i></a>
+                      <a class="nav-link active text-light" href="productos?accion=vercarrito">Cesta <i class="bi bi-bag-fill"></i></a>
                   </li>
               </ul>  
               
@@ -82,10 +82,33 @@
                     <input type="hidden" name="accion" value="buscarproducto">
                     <input type="text" name="producto" class="form-control" 
                            placeholder="Buscar productos...">
-                    <button type="submit" class="btn btn-recyclon">
-                        <i class="bi bi-search"></i> Buscar
-                    </button>
+<!--                     <button type="submit" class="btn btn-recyclon"> -->
+<!--                         <i class="bi bi-search"></i> Buscar -->
+<!--                     </button> -->
                 </form>
+                <div class="col-12 mt-2 text-end">
+				    <c:if test="${sessionScope.usuario != null && sessionScope.usuario.isAdmin}">
+				        <a href="productos?accion=nuevoproducto" class="me-2 text-dark">
+				            <i class="bi bi-plus-circle"></i> Añadir Producto
+				        </a>
+				    </c:if>
+				    <select class="form-select d-inline-block me-2" style="width: auto;" onchange="if(this.value) window.location.href=this.value;">
+			            <option value="">Filtrar por...</option>
+			            <option value="" class="fw-bold">Precio</option>
+			            <option value="productos?accion=getprecioasc">De más barato a más caro</option>
+			            <option value="productos?accion=getpreciodesc">De más caro a más barato</option>
+			            <option value="" class="fw-bold">Categoría</option>
+			            <c:forEach var="categoria" items="${categorias}">
+					        <option value="productos?accion=getcategoriaproducto&id=${categoria.idCategoria}">
+					            ${categoria.tipo}
+					        </option>
+					    </c:forEach>
+			            <c:if test="${sessionScope.usuario != null && sessionScope.usuario.isAdmin}">
+			            	<option value="" class="fw-bold">Stock</option>
+			            	<option value="productos?accion=stockbajo">Productos con stock bajo</option>
+			            </c:if>
+			        </select>
+				</div>
             </div>
         </div>
 
@@ -95,7 +118,7 @@
         <div class="col">
             <div class="card shadow-sm position-relative border-0">
                 <!-- Badge de Stock -->
-                <span class="rounded-bottom-0 badge ${producto.stock > 0 ? 'bg-success' : 'bg-danger'}"> <%-- Si hay stock(verde) si no(rojo) --%>
+                <span class="rounded-bottom-0 badge ${producto.stock > 5 ? 'bg-success' : 'bg-danger'}"> <%-- Si hay stock(verde) si no(rojo) --%>
                     <c:choose> <%-- if-else --%>
                         <c:when test="${producto.stock > 0}"> <%--Si hay mas de 0 preoductos --%>
                             Stock: ${producto.stock} <%--mostramos el numero de productos que hay --%>

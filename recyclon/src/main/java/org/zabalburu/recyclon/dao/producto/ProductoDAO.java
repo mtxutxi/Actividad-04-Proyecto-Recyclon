@@ -13,4 +13,7 @@ public interface ProductoDAO {
 	List<Producto> getProductosPorCategoria(); //Para filtrar todos los productos por cada categoria
 	List<Producto> getCategoriaProducto(Integer idCategoria); //Para mostrar los productos de una categoria
 	List<Producto> buscarProducto(String busqueda); //Buscar producto con un LIKE
+	List<Producto> getProductosStockBajo(Integer stock);
+	List<Producto> getPrecioAsc();
+	List<Producto> getPrecioDesc();
 }

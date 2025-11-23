@@ -42,4 +42,6 @@ public class LineaPedido implements Serializable {
 	private Producto producto;
 	
 	private Integer cantidad;
+	
+	private Double precio; // precio total linea pedido
 }

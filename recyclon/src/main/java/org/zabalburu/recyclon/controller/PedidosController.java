@@ -1,5 +1,17 @@
 package org.zabalburu.recyclon.controller;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.zabalburu.recyclon.modelo.Cesta;
+import org.zabalburu.recyclon.modelo.LineaPedido;
+import org.zabalburu.recyclon.modelo.Pedido;
+import org.zabalburu.recyclon.modelo.Producto;
+import org.zabalburu.recyclon.modelo.Usuario;
+import org.zabalburu.recyclon.service.GestionService;
+
 import jakarta.inject.Inject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -7,14 +19,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.zabalburu.recyclon.modelo.Pedido;
-import org.zabalburu.recyclon.modelo.Usuario;
-import org.zabalburu.recyclon.service.GestionService;
 
 /**
  * Servlet implementation class PedidosController
@@ -25,6 +29,9 @@ public class PedidosController extends HttpServlet {
     
     @Inject
     private GestionService service;
+    
+    @Inject
+    private Cesta cesta;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -96,32 +103,98 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 	        response.sendRedirect("usuarios");
 	        return;
 	    }
-	    //verifica que sea administrador
-	    if (usuario.getIsAdmin() == null || !usuario.getIsAdmin()) {
-	        response.sendRedirect("pedidos");
-	        return;
-	    }
-	    //llama a la acccion de cambiar estado
 	    String accion = request.getParameter("accion");
 	    
-	    if ("cambiarEstado".equals(accion)) {
-	        String idPedidoStr = request.getParameter("idPedido");
-	        String nuevoEstado = request.getParameter("estado");
-	        
-	        if (idPedidoStr != null && nuevoEstado != null && !nuevoEstado.isEmpty()) {
-	            try {
-	                Integer idPedido = Integer.parseInt(idPedidoStr);
-	                service.estadoPedido(idPedido, nuevoEstado);
-	                sesion.setAttribute("mensaje", "Estado actualizado correctamente");
-	            } catch (NumberFormatException e) {
-	                sesion.setAttribute("error", "ID de pedido invalido");
-	            }
-	        }
-	        
-	        response.sendRedirect("pedidos");
-	            return;
-	        }
-	        
-	        doGet(request, response);
+	  //finaliza pedido desde carrito (cualkier usuario puede hacerlo)
+        if ("finalizarpedido".equals(accion)) {
+            finalizarPedido(request, response, sesion, usuario);
+            return;
+        }
+        
+        // verifica que sea administrador para cambiar estado
+        if (usuario.getIsAdmin() == null || !usuario.getIsAdmin()) {
+            response.sendRedirect("pedidos");
+            return;
+        }
+        
+        //solo admin
+        if ("cambiarEstado".equals(accion)) {
+            String idPedidoStr = request.getParameter("idPedido");
+            String nuevoEstado = request.getParameter("estado");
+            
+            if (idPedidoStr != null && nuevoEstado != null && !nuevoEstado.isEmpty()) {
+                try {
+                    Integer idPedido = Integer.parseInt(idPedidoStr);
+                    service.estadoPedido(idPedido, nuevoEstado);
+                    sesion.setAttribute("mensaje", "Estado actualizado correctamente");
+                } catch (NumberFormatException e) {
+                    sesion.setAttribute("error", "ID de pedido invalido");
+                }
+            }
+            
+            response.sendRedirect("pedidos");
+            return;
+        }
+        
+        doGet(request, response);
     }
+
+	private void finalizarPedido(HttpServletRequest request, HttpServletResponse response, HttpSession sesion,
+			Usuario usuario) throws IOException {
+		 //verificar que el carrito no esté vacío
+        if (cesta.estaVacia()) {
+            sesion.setAttribute("error", "El carrito está vacío");
+            response.sendRedirect("productos?accion=vercarrito");
+            return;
+        }
+         
+        try {
+            //crea pedido
+            Pedido pedido = new Pedido();
+            pedido.setUsuario(usuario);
+            pedido.setFecha(new java.util.Date());
+            pedido.setEstado("Pendiente");
+            pedido = service.nuevoPedido(pedido);
+
+         // MAP es mejor para cestas: acceso por id, evitas duplicados
+         // actualiza cantidades sin buscar en la lista:
+            //usado porque me daba un erroe
+            
+            // creaa lineas de pedido para cada producto del carrito
+            for (Map.Entry<Integer, Integer> entry : cesta.getProductos().entrySet()) {
+                Integer idProducto = entry.getKey();
+                Integer cantidad = entry.getValue();
+                
+                Producto producto = service.getProducto(idProducto);
+              
+                // mira stock
+                if (producto.getStock() < cantidad) {
+                    sesion.setAttribute("error", "NO hay stock suficiente de " + producto.getNombre());
+                    response.sendRedirect("productos?accion=vercarrito");
+                    return;
+                }
+                //crea línea de pedido
+                LineaPedido linea = new LineaPedido();
+                linea.setPedido(pedido);
+                linea.setProducto(producto);
+                linea.setCantidad(cantidad);
+                linea.setPrecio(producto.getPrecio());
+                service.nuevaLineaPedido(linea);
+                
+                //actualizar stock
+                producto.setStock(producto.getStock() - cantidad);
+                service.modificarProducto(producto);
+            }
+            //vaciaa el carrito
+            cesta.vaciar();
+            
+            sesion.setAttribute("mensaje", "¡Pedido realizado con éxito!");
+            response.sendRedirect("pedidos");
+            
+        } catch (Exception e) {
+            sesion.setAttribute("error", "Error al procesar el pedido");
+            response.sendRedirect("productos?accion=vercarrito");
+        }
+		
+	}
 }

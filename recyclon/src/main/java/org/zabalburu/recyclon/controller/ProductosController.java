@@ -2,10 +2,14 @@ package org.zabalburu.recyclon.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.zabalburu.recyclon.cdi.MensajeCDI;
 import org.zabalburu.recyclon.modelo.Categoria;
+import org.zabalburu.recyclon.modelo.Cesta;
 import org.zabalburu.recyclon.modelo.Producto;
 import org.zabalburu.recyclon.modelo.Usuario;
 import org.zabalburu.recyclon.service.GestionService;
@@ -33,6 +37,10 @@ public class ProductosController extends HttpServlet {
 	
 	@Inject
 	private MensajeCDI mensajeCDI;
+	
+	@Inject
+	private Cesta cesta;
+	
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -52,6 +60,7 @@ public class ProductosController extends HttpServlet {
 				/*Los datos que se cargan automaticamente en la pagina y no hacen operaciones van en el if, si hacen algo o necesitan 
 				  interaccion del ususario van al switch por que tenemos sus metodos fuera*/
 				if(accion == null) {//esto seria que no hacen operaciones, solo muestran los datos sin más
+					request.setAttribute("categorias", service.getCategorias());
 					request.setAttribute("productosporcategoria", service.getProductosPorCategoria());// obtiene los productosPorCat usando el metodo del service y los guarda en pedidos para que esten disponibles en el jsp
 					pagina = "productos.jsp";
 				}else {/*Ahora vamos a meter las acciones que requieren intervención del usuario, que no son de mostrar y listo.*/
@@ -75,10 +84,63 @@ public class ProductosController extends HttpServlet {
 						case "buscarproducto":
 							pagina = buscarProducto(request,response);
 							break;
-						
+		                case "vercarrito":
+		                    pagina = verCarrito(request, response);
+		                    break;
+						case "stockbajo":
+							pagina = stockBajo(request, response);
+							break;
+						case "getprecioasc":
+							pagina = getprecioasc(request, response);
+							break;
+						case "getpreciodesc":
+							pagina = getpreciodesc(request, response);
+							break;
 					}
 				}
 				request.getRequestDispatcher(pagina).forward(request, response);
+	}
+
+	private String getpreciodesc(HttpServletRequest request, HttpServletResponse response) {
+		request.setAttribute("categorias", service.getCategorias());
+		request.setAttribute("productosporcategoria", service.getPrecioDesc());
+		return "productos.jsp";
+	}
+
+	private String getprecioasc(HttpServletRequest request, HttpServletResponse response) {
+		request.setAttribute("categorias", service.getCategorias());
+		request.setAttribute("productosporcategoria", service.getPrecioAsc());
+		return "productos.jsp";
+	}
+
+	private String stockBajo(HttpServletRequest request, HttpServletResponse response) {
+		Integer stock = 5;
+		request.setAttribute("categorias", service.getCategorias());
+		request.setAttribute("productosporcategoria", service.getProductosStockBajo(stock));
+		return "productos.jsp";
+	}
+
+	private String verCarrito(HttpServletRequest request, HttpServletResponse response) {
+		// crea lista para enviar al JSP con producto + cantidad
+	    List<Map<String, Object>> productosCarrito = new ArrayList<>();  
+	    
+	    // por cada producto en la cesta, obtener los datos completos
+	    for (Map.Entry<Integer, Integer> entry : cesta.getProductos().entrySet()) {
+	        Integer idProducto = entry.getKey();
+	        Integer cantidad = entry.getValue();
+	        
+	        Producto producto = service.getProducto(idProducto);
+	        
+	        if (producto != null) {
+	            Map<String, Object> item = new HashMap<>();
+	            item.put("producto", producto);
+	            item.put("cantidad", cantidad);
+	            productosCarrito.add(item);
+	        }
+	    }
+	    
+	    request.setAttribute("productosCarrito", productosCarrito);
+	    return "cesta.jsp";
 	}
 
 	private String buscarProducto(HttpServletRequest request, HttpServletResponse response) {
@@ -106,6 +168,7 @@ public class ProductosController extends HttpServlet {
 		String strIdCategoria = request.getParameter("id");
 		Integer idCategoria = Integer.parseInt(strIdCategoria);
 		List<Producto> listaProductos = service.getCategoriaProducto(idCategoria);
+		request.setAttribute("categorias", service.getCategorias());
 		request.setAttribute("productosporcategoria", listaProductos);
 		return "productos.jsp";
 	}
@@ -164,12 +227,82 @@ public class ProductosController extends HttpServlet {
 				case "productonuevo":
 					pagina = crearProducto(request);
 					break;
+				case "anadiralcarrito":
+					pagina = añadirCarrito(request, response);
+					break;
+				case "eliminardelcarrito":
+					pagina = eliminarCarrito(request, response);
+					break;
 			}
 		}
 		request.getRequestDispatcher(pagina).forward(request, response);			
 	}
 
 	
+	private String eliminarCarrito(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			Integer idProducto = Integer.parseInt(request.getParameter("id"));
+			cesta.eliminarProducto(idProducto);
+			
+			mensajeCDI.setMessage("Producto eliminado del carrito");
+			mensajeCDI.setRole("alert-success");
+			
+		} catch (NumberFormatException e) {
+			mensajeCDI.setMessage("Error al eliminar producto");
+			mensajeCDI.setRole("alert-danger");
+		}
+		
+		// Recargar carrito
+		return verCarrito(request, response);
+	}
+
+	private String añadirCarrito(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			String idParam = request.getParameter("id");
+			String cantParam = request.getParameter("cantidad");
+			
+			Integer idProducto = Integer.parseInt(idParam);
+			Integer cantidad = Integer.parseInt(cantParam);
+			
+			Producto producto = service.getProducto(idProducto);
+			
+			if (producto == null) {
+				mensajeCDI.setMessage("Producto no encontrado");
+				mensajeCDI.setRole("alert-danger");
+				request.setAttribute("productosporcategoria", service.getProductosPorCategoria());
+				return "productos.jsp";
+			}
+			
+			if (producto.getStock() < cantidad) {
+				mensajeCDI.setMessage("No hay suficiente stock disponible");
+				mensajeCDI.setRole("alert-danger");
+				request.setAttribute("producto", producto);
+				return "detalleproducto.jsp";
+			}
+			
+			if (cesta == null) {
+				mensajeCDI.setMessage("Error: Carrito no disponible");
+				mensajeCDI.setRole("alert-danger");
+				request.setAttribute("productosporcategoria", service.getProductosPorCategoria());
+				return "productos.jsp";
+			}
+			
+			cesta.añadirProducto(idProducto, cantidad);
+			
+			mensajeCDI.setMessage("Producto añadido al carrito");
+			mensajeCDI.setRole("alert-success");
+			request.setAttribute("productosporcategoria", service.getProductosPorCategoria());
+			
+			return "productos.jsp";
+			
+		} catch (Exception e) {
+			mensajeCDI.setMessage("Error: " + e.getMessage());
+			mensajeCDI.setRole("alert-danger");
+			request.setAttribute("productosporcategoria", service.getProductosPorCategoria());
+			return "productos.jsp";
+		}
+	}
+
 	private String crearProducto(HttpServletRequest request) {
 		HttpSession sesion = request.getSession();
 	    Usuario usuario = (Usuario) sesion.getAttribute("usuario");

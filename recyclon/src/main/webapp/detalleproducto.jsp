@@ -72,7 +72,7 @@
                   	  <a class="nav-link text-light" href="pedidos">Pedidos <i class="bi bi-box-seam-fill"></i></a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link active text-light" href="cesta">Cesta <i class="bi bi-bag-fill"></i></a>
+                      <a class="nav-link active text-light" href="productos?accion=vercarrito">Cesta <i class="bi bi-bag-fill"></i></a>
                   </li>
               </ul>
             </div>
@@ -142,19 +142,32 @@
 
                         <!-- Botones -->
                         <div class="d-grid gap-2">
-                            <c:if test="${producto.stock > 0}">
-                                <button class="btn btn-recyclon btn-lg">
-                                    <i class="bi bi-cart-plus"></i> Añadir al Carrito
-                                </button>
+                            <c:if test="${empty sessionScope.usuario.isAdmin or not sessionScope.usuario.isAdmin}">
+                                <c:if test="${producto.stock > 0}">
+                                    <form method="post" action="productos">
+                                        <input type="hidden" name="accion" value="anadiralcarrito">
+                                        <input type="hidden" name="id" value="${producto.idProducto}">
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label">Cantidad:</label>
+                                            <input type="number" name="cantidad" class="form-control" value="1" min="1" max="${producto.stock}">
+                                        </div>
+                                        
+                                        <button type="submit" class="btn btn-success btn-lg w-100 mb-2">
+                                            <i class="bi bi-cart-plus"></i> Añadir al Carrito
+                                        </button>
+                                    </form>
+                                </c:if>
                             </c:if>
 
-                            <c:if test="${sessionScope.usuario != null && sessionScope.usuario.isAdmin}">
-                                <a href="productos?accion=modificarproducto&id=${producto.idProducto}" class="btn btn-warning">
+                            <!-- solo si es admin ve -->
+                            <c:if test="${not empty sessionScope.usuario.isAdmin and sessionScope.usuario.isAdmin}">
+                                <a href="productos?accion=modificarproducto&id=${producto.idProducto}" class="btn btn-warning btn-lg">
                                     <i class="bi bi-pencil"></i> Modificar Producto
                                 </a>
                                 <a href="productos?accion=eliminarproducto&id=${producto.idProducto}" 
-                                   class="btn btn-danger"
-                                   onclick="return confirm('¿Eliminar este producto?')">
+                                   class="btn btn-danger btn-lg"
+                                   onclick="return confirm('¿Estás seguro de eliminar este producto?')">
                                     <i class="bi bi-trash"></i> Eliminar Producto
                                 </a>
                             </c:if>

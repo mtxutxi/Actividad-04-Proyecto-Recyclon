@@ -129,6 +129,18 @@ public class GestionService {
 		return productoDAO.buscarProducto(busqueda);
 	}
 	
+	public List<Producto> getProductosStockBajo(Integer stock) {
+		return productoDAO.getProductosStockBajo(stock);
+	}
+	
+	public List<Producto> getPrecioAsc() {
+		return productoDAO.getPrecioAsc();
+	}
+	
+	public List<Producto> getPrecioDesc() {
+		return productoDAO.getPrecioDesc();
+	}
+	
 	//USUARIO//
 	public Usuario nuevoUsuario(Usuario nuevo) {
 		return usuarioDAO.nuevoUsuario(nuevo);
