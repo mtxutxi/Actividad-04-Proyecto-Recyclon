@@ -66,13 +66,13 @@
                   	  <a class="nav-link text-light" href="controladorrecyclon">Usuario <i class="bi bi-person-fill"></i></a>
                   </li>
                   <li class="nav-item">
-                  	  <a class="nav-link active text-light fw-bold" aria-current="page" href="productos">Catálogo <i class="bi bi-book-fill"></i></a>
+                  	  <a class="nav-link text-light" href="productos">Catálogo <i class="bi bi-book-fill"></i></a>
                   </li>
                   <li class="nav-item">
                   	  <a class="nav-link text-light" href="pedidos">Pedidos <i class="bi bi-box-seam-fill"></i></a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link active text-light" href="productos?accion=vercarrito">Cesta <i class="bi bi-bag-fill"></i></a>
+                      <a class="nav-link active text-light fw-bold" aria-current="page" href="productos?accion=vercarrito">Cesta <i class="bi bi-bag-fill"></i></a>
                   </li>
               </ul>
             </div>
