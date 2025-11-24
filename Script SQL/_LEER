@@ -1,0 +1,20 @@
+Orden de ejecución
+1. Categoria
+2. Producto
+3. Usuario
+4. Pedido
+5. Linea_Pedido
+
+Usuarios
+1. 
+  -     Usuario: florenciabelen.barbas.bogado@zabalburu.org
+  -  Contraseña: usuario
+2.
+  -     Usuario: jesusalejandro.martinez.gonzalez@zabalburu.org
+  -  Contraseña: usuario
+3.
+  -     Usuario: sheila.roca.garrido@zabalburu.org
+  -  Contraseña: usuario
+4. 
+  -     Usuario: admin
+  -  Contraseña: admin
