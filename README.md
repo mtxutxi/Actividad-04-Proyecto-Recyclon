@@ -28,3 +28,20 @@ El segundo será un administrador de la web, encargado de revisar los pedidos y 
 **Backend:** Java\
 **Base de datos:** SQL server\
 **Control de versiones:** Git y GitHub
+
+
+### **Capturas de las vistas principales**
+**Inicio de Sesión**
+<img src="Capturas/1.png">
+
+**Usuario**
+<img src="Capturas/2.png">
+
+**Productos**
+<img src="Capturas/3.png">
+
+**Pedidos**
+<img src="Capturas/4.png">
+
+**Cesta**
+<img src="Capturas/5.png">
